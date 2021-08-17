@@ -7,7 +7,7 @@ var app = new Vue({
     },
     mounted () {
         axios
-        .get('http://localhost:8000/inventory/?asset_tag=125700')
+        .get('http://localhost:8000/inventory/?make=Dell')
         .then(response => (this.info = response))
     }
 })
