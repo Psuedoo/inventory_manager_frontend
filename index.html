@@ -10,7 +10,13 @@
     </header>
     <body>
         <div id="app">
-            {{ info }}
+            <ol>
+                <computer-item
+                v-for="computer in computerList"
+                v-bind:computer="computer"
+                v-bind:key="computer.service_tag"
+                ></computer-item>
+            </ol>
         </div>
         <script src="index.js"></script>
     </body>
