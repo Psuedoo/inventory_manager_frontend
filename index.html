@@ -14,20 +14,30 @@
             border-collapse: collapse;
             text-align: center;
         }
+
+        tr:nth-child(even) {background-color: #e3e3e3;}
+        tr:hover {background-color: rgb(113, 216, 23);}
+
+
+
     </style>
     <body>
         <div id="app">
-            <table style="width: 60%">
+            <table style="width: 100%; overflow-x: auto">
                 <tr>
                     <th>Make</th>
                     <th>Model</th>
                     <th>Service Tag</th>
                     <th>Asset Tag</th>
                     <th>Issued</th>
+                    <th>Issuee</th>
                     <th>On Hand</th>
                     <th>On Location</th>
+                    <th>Class Location</th>
                     <th>Location</th>
                     <th>Checker</th>
+                    <th>Time Checked</th>
+                    <th>Notes</th>
                 </tr>
                 <tr>
                     <tr v-for="computer, key in computerList">
@@ -36,10 +46,14 @@
                         <td>{{ computer.service_tag }}</td>
                         <td>{{ computer.asset_tag }}</td>
                         <td>{{ computer.issued }}</td>
+                        <td>{{ computer.issuee }}</td>
                         <td>{{ computer.on_hand }}</td>
                         <td>{{ computer.on_location }}</td>
                         <td>{{ computer.location }}</td>
+                        <td>{{ computer.class_location }}</td>
                         <td>{{ computer.checker }}</td>
+                        <td>{{ computer.time_checked }}</td>
+                        <td>{{ computer.notes }}</td>
                     </tr>
                 </td>
                 </tr>
