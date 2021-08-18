@@ -8,18 +8,39 @@
 
 
     </header>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+        }
+    </style>
     <body>
         <div id="app">
-            <table>
+            <table style="width: 60%">
                 <tr>
                     <th>Make</th>
                     <th>Model</th>
                     <th>Service Tag</th>
                     <th>Asset Tag</th>
+                    <th>Issued</th>
+                    <th>On Hand</th>
+                    <th>On Location</th>
+                    <th>Location</th>
+                    <th>Checker</th>
                 </tr>
                 <tr>
-                    <tr v-for="computer, key in computerList"></tr>
-                        <tr><td> {{ computer.make }} </td><td> {{ computer.model }} </td><td> {{ computer.service_tag }} </td><td> {{ computer.asset_tag }} </td></tr>
+                    <tr v-for="computer, key in computerList">
+                        <td>{{ computer.make }}</td>
+                        <td>{{ computer.model }}</td>
+                        <td>{{ computer.service_tag }}</td>
+                        <td>{{ computer.asset_tag }}</td>
+                        <td>{{ computer.issued }}</td>
+                        <td>{{ computer.on_hand }}</td>
+                        <td>{{ computer.on_location }}</td>
+                        <td>{{ computer.location }}</td>
+                        <td>{{ computer.checker }}</td>
+                    </tr>
                 </td>
                 </tr>
             </table>
