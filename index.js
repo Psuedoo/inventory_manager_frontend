@@ -1,6 +1,6 @@
 Vue.component('computer-item', {
     props: ['computer'],
-    template: '<li>Make: {{ computer.make }} Model: {{ computer.model }} Asset Tag: {{ computer.asset_tag }} Service Tag: {{ computer.service_tag }}</li>'
+    template: '<tr><td> {{ computer.make }} </td><td> {{ computer.model }} </td><td> {{ computer.service_tag }} </td><td> {{ computer.asset_tag }} </td></tr>'
 })
 
 var app = new Vue({
@@ -12,7 +12,6 @@ var app = new Vue({
     mounted () {
         axios
         .get('http://localhost:8000/inventory/?make=Dell')
-        .then(response => (this.computerList = response['data']))
+        .then(response => (this.computerList = response.data))
     }
 })
-

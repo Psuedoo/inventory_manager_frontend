@@ -10,13 +10,19 @@
     </header>
     <body>
         <div id="app">
-            <ol>
-                <computer-item
-                v-for="computer in computerList"
-                v-bind:computer="computer"
-                v-bind:key="computer.service_tag"
-                ></computer-item>
-            </ol>
+            <table>
+                <tr>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Service Tag</th>
+                    <th>Asset Tag</th>
+                </tr>
+                <tr>
+                    <tr v-for="computer, key in computerList"></tr>
+                        <tr><td> {{ computer.make }} </td><td> {{ computer.model }} </td><td> {{ computer.service_tag }} </td><td> {{ computer.asset_tag }} </td></tr>
+                </td>
+                </tr>
+            </table>
         </div>
         <script src="index.js"></script>
     </body>
