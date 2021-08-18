@@ -1,6 +1,6 @@
 Vue.component('computer-item', {
     props: ['computer'],
-    template: '<tr><td> {{ computer.make }} </td><td> {{ computer.model }} </td><td> {{ computer.service_tag }} </td><td> {{ computer.asset_tag }} </td></tr>'
+    template: '<tr><td>{{computer.make}}</td></tr>'
 })
 
 var app = new Vue({
@@ -15,3 +15,5 @@ var app = new Vue({
         .then(response => (this.computerList = response.data))
     }
 })
+
+Vue.prototype.moment = moment;
