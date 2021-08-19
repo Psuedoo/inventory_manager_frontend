@@ -20,9 +20,7 @@
                 <div v-if="loading">Loading...</div>
                 <div v-else>
 
-                    <label>Search checker:</label>
-                    <input type="text" v-model="search" placeholder="Name">
-                    <!-- <checker-search></checker-search> -->
+                    <search v-bind:parent="parentSearch"></search>
 
                     <table style="width: 100%; overflow-x: auto">
                         <tr>
@@ -32,11 +30,11 @@
                                 <th>Service Tag</th>
                                 <th>Asset Tag</th>
                                 <th>Issued</th>
-                                <th>Issuee</th>
+                                <th>Assigned To</th>
                                 <th>On Hand</th>
                                 <th>On Location</th>
-                                <th>Class Location</th>
                                 <th>Location</th>
+                                <th>Class Location</th>
                                 <th>Checker</th>
                                 <th>Last Time Checked</th>
                                 <th>Notes</th>
@@ -49,10 +47,10 @@
                                 <td>{{ computer.service_tag }}</td>
                                 <td>{{ computer.asset_tag }}</td>
                                 <td>{{ computer.issued }}</td>
-                                <td>{{ computer.issuee }}</td>
+                                <td>{{ computer.assigned_to }}</td>
                                 <td>{{ computer.on_hand }}</td>
                                 <td>{{ computer.on_location }}</td>
-                                <td>{{ computer.location }}</td>
+                                <td>{{ computer.computer_location }}</td>
                                 <td>{{ computer.class_location }}</td>
                                 <td>{{ computer.checker }}</td>
                                 <td>{{ moment(computer.time_checked).fromNow() }}</td>
