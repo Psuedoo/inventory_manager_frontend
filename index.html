@@ -20,9 +20,9 @@
                 <div v-if="loading">Loading...</div>
                 <div v-else>
 
+
                     <label>Search checker:</label>
-                    <input type="text" v-model="search" placeholder="Name">
-                    <!-- <checker-search></checker-search> -->
+                    <checker-search v-bind:parent="parentSearch"></checker-search>
 
                     <table style="width: 100%; overflow-x: auto">
                         <tr>

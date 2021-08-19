@@ -1,12 +1,9 @@
-
 Vue.component('checker-search', {
-    props: ['search'],
+    props: ['parent'],
     template: `
-    <input
-        type="text"
-        v-model="search"
-        placeholder="Name"
-    >
+    <div>
+        <slot></slot>
+        <input type="text" v-model="parent.checkerSearch" placeholder="Name" >
     `,
 })
 
@@ -14,10 +11,13 @@ Vue.component('checker-search', {
 var app = new Vue({
     el: '#app',
     data: {
+        parentSearch: {
+            checkerSearch: ''
+        },
         search: '',
         computerList: [],
         loading: true,
-        errored: false
+        errored: false,
     },
     mounted () {
         axios
@@ -32,7 +32,7 @@ var app = new Vue({
     computed: {
         filteredList(){
             return this.computerList.filter(computer => {
-                return computer.checker.includes(this.search)
+                return computer.checker.includes(this.parentSearch.checkerSearch)
             })
         }
     }
