@@ -20,10 +20,9 @@
                 <div v-if="loading">Loading...</div>
                 <div v-else>
 
-                    <computer-table></computer-table>
-
                     <label>Search checker:</label>
-                    <checker-search></checker-search>
+                    <input type="text" v-model="search" placeholder="Name">
+                    <!-- <checker-search></checker-search> -->
 
                     <table style="width: 100%; overflow-x: auto">
                         <tr>
