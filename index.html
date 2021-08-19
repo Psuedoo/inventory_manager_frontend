@@ -1,0 +1,71 @@
+<html>
+    <header>
+        <title text="Inventory Manager">
+            Inventory Manager
+        </title>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        <link rel="stylesheet" href="normalize.css">
+
+    </header>
+    <body>
+        <div id="app">
+
+            <section v-if="errored">
+                <p>Unable to retrieve the inventory at the moment. Please try again later.</p>
+            </section>
+
+            <section v-else>
+                <div v-if="loading">Loading...</div>
+                <div v-else>
+
+                    <label>Search checker:</label>
+                    <input type="text" v-model="search" placeholder="Name">
+                    <!-- <checker-search></checker-search> -->
+
+                    <table style="width: 100%; overflow-x: auto">
+                        <tr>
+                            <thead>
+                                <th>Make</th>
+                                <th>Model</th>
+                                <th>Service Tag</th>
+                                <th>Asset Tag</th>
+                                <th>Issued</th>
+                                <th>Issuee</th>
+                                <th>On Hand</th>
+                                <th>On Location</th>
+                                <th>Class Location</th>
+                                <th>Location</th>
+                                <th>Checker</th>
+                                <th>Last Time Checked</th>
+                                <th>Notes</th>
+                            </thead>
+                        </tr>
+                        <tbody>
+                            <tr v-for="computer in filteredList">
+                                <td>{{ computer.make }}</td>
+                                <td>{{ computer.model }}</td>
+                                <td>{{ computer.service_tag }}</td>
+                                <td>{{ computer.asset_tag }}</td>
+                                <td>{{ computer.issued }}</td>
+                                <td>{{ computer.issuee }}</td>
+                                <td>{{ computer.on_hand }}</td>
+                                <td>{{ computer.on_location }}</td>
+                                <td>{{ computer.location }}</td>
+                                <td>{{ computer.class_location }}</td>
+                                <td>{{ computer.checker }}</td>
+                                <td>{{ moment(computer.time_checked).fromNow() }}</td>
+                                <td>{{ computer.notes }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+        <script src="index.js"></script>
+    </body>
+    <footer>
+    </footer>
+</html>
