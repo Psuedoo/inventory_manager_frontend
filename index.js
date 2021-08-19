@@ -15,7 +15,6 @@ var app = new Vue({
     el: '#app',
     data: {
         search: '',
-        title: '',
         computerList: [],
         loading: true,
         errored: false
