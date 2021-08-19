@@ -9,11 +9,15 @@ Vue.component('search', {
             <option value="make">Make</option>
             <option value="model">Model</option>
             <option value="service_tag">Service Tag</option>
-            <option value="computer_location">Location</option>
             <option value="asset_tag">Asset Tag</option>
+            <option value="assigned_to">Assigned To</option>
+            <option value="computer_location">Location</option>
+            <option value="class_location">Class Location</option>
             <option value="checker">Checker</option>
+            <option value="time_checked">Last Time Checked</option>
+            <option value="notes">Notes</option>
         </select>
-
+        
         <input type="text" v-model="parent.search" placeholder="Type here">
     </div>
     `
