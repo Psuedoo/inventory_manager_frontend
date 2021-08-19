@@ -3,7 +3,15 @@ Vue.component('checker-search', {
     template: `
     <div>
         <slot></slot>
-        <input type="text" v-model="parent.checkerSearch" placeholder="Name" >
+        <input type="text" v-model="parent.checker" placeholder="Name" >
+    `,
+})
+Vue.component('class-location-search', {
+    props: ['parent'],
+    template: `
+    <div>
+        <slot></slot>
+        <input type="text" v-model="parent.classLocation" placeholder="Name" >
     `,
 })
 
@@ -12,7 +20,8 @@ var app = new Vue({
     el: '#app',
     data: {
         parentSearch: {
-            checkerSearch: ''
+            checker: '',
+            classLocation: ''
         },
         search: '',
         computerList: [],
@@ -32,7 +41,7 @@ var app = new Vue({
     computed: {
         filteredList(){
             return this.computerList.filter(computer => {
-                return computer.checker.includes(this.parentSearch.checkerSearch)
+                return computer.checker.toLowerCase().includes(this.parentSearch.checker.toLowerCase())
             })
         }
     }
