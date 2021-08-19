@@ -1,18 +1,22 @@
-Vue.component('checker-search', {
+Vue.component('search', {
     props: ['parent'],
-    template: `
+    template:`
     <div>
         <slot></slot>
-        <input type="text" v-model="parent.checker" placeholder="Name" >
-    `,
-})
-Vue.component('class-location-search', {
-    props: ['parent'],
-    template: `
-    <div>
-        <slot></slot>
-        <input type="text" v-model="parent.classLocation" placeholder="Name" >
-    `,
+        <label for="values">Choose a search value:</label>
+
+        <select name="values" id="values" v-model="parent.property">
+            <option value="make">Make</option>
+            <option value="model">Model</option>
+            <option value="service_tag">Service Tag</option>
+            <option value="computer_location">Location</option>
+            <option value="asset_tag">Asset Tag</option>
+            <option value="checker">Checker</option>
+        </select>
+
+        <input type="text" v-model="parent.search" placeholder="Type here">
+    </div>
+    `
 })
 
 
@@ -20,8 +24,8 @@ var app = new Vue({
     el: '#app',
     data: {
         parentSearch: {
-            checker: '',
-            classLocation: ''
+            search: '',
+            property: 'make',   
         },
         search: '',
         computerList: [],
@@ -41,7 +45,7 @@ var app = new Vue({
     computed: {
         filteredList(){
             return this.computerList.filter(computer => {
-                return computer.checker.toLowerCase().includes(this.parentSearch.checker.toLowerCase())
+                return computer[this.parentSearch.property].includes(this.parentSearch.search)
             })
         }
     }
