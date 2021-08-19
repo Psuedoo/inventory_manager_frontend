@@ -1,54 +1,39 @@
-Vue.component('computer-item', {
-    props: ['computer'],
-    template: `
-    <tr>
-        <td>{{ computer.make }}</td>
-        <td>{{ computer.model }}</td>
-        <td>{{ computer.service_tag }}</td>
-        <td>{{ computer.asset_tag }}</td>
-        <td>{{ computer.issued }}</td>
-        <td>{{ computer.issuee }}</td>
-        <td>{{ computer.on_hand }}</td>
-        <td>{{ computer.on_location }}</td>
-        <td>{{ computer.location }}</td>
-        <td>{{ computer.class_location }}</td>
-        <td>{{ computer.checker }}</td>
-        <td>{{ moment(computer.time_checked).fromNow() }}</td>
-        <td>{{ computer.notes }}</td>
-    </tr>
-    `
 
+Vue.component('checker-search', {
+    props: ['search'],
+    template: `
+    <input
+        type="text"
+        v-model="search"
+        placeholder="Name"
+    >
+    `,
 })
 
-
-// Vue.component('checker-search', {
-//     props: ['value'],
-//     template: `
-//     <input
-//         v-bind:value="value"
-//         v-on:input="filteredList()"
-//     >
-//     `
-// })
 
 var app = new Vue({
     el: '#app',
     data: {
         search: '',
         title: '',
-        computerList: [
-        ]
+        computerList: [],
+        loading: true,
+        errored: false
     },
     mounted () {
         axios
         .get('http://localhost:8000/inventory/')
         .then(response => (this.computerList = response.data))
+        .catch(error => {
+            console.log(error)
+            this.errored = true
+        })
+        .finally(() => this.loading = false)
     },
     computed: {
         filteredList(){
-            let title = this.title
             return this.computerList.filter(computer => {
-                return computer.title.includes(this.search)
+                return computer.checker.includes(this.search)
             })
         }
     }
