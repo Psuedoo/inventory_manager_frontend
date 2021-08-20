@@ -33,7 +33,9 @@ Vue.component('add-computer-form',{
                 notes: this.notes
 
             })
-            // .then(response => (parent.response = response.statusCode))
+            .then((res) => {
+                location.reload()
+            })
         }    
     },
     template:`
@@ -77,7 +79,7 @@ Vue.component('add-computer-form',{
         <input type="textarea" name="fnotes" placeholder="Notes" v-model="notes">
         </p>
         <p>
-        <input type="submit">
+        <input type="submit" @click="return True">
         </p>
         </form>
     </div>
