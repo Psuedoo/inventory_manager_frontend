@@ -36,6 +36,7 @@ Vue.component('add-computer-form',{
             .then((res) => {
                 location.reload()
             })
+            // .then(response => (parent.response = response.statusCode))
         }    
     },
     template:`
