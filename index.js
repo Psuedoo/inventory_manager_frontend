@@ -1,8 +1,9 @@
 Vue.component('search', {
     props: ['parent'],
     template:`
-    <div>
+    <div class="input-group nb3">
         <slot></slot>
+    
         <label for="values">Choose a search value:</label>
 
         <select name="values" id="values" v-model="parent.property">
