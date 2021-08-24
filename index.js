@@ -43,6 +43,7 @@ Vue.component('add-computer-form',{
             notes: '',
         }
     },
+    props: ['locations'],
     methods: {
         postComputer: function () {
             axios
@@ -99,15 +100,12 @@ Vue.component('add-computer-form',{
         </div>
         <div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="location" placeholder="">
-                <label for="location">Location</label>
-            </div>
-            <div class="form-floating mb-3">
-                <label for="locationListInput" class="form-label">Locations</label>
-                <input class="form-control" list="locationList" id="locationListInput" placeholder="E.g. Classroom 2401">
-                <datalist id="locationList">
-                    <!-- For loop goes here -->
+                <input class="form-control" id="locationInput" list="locationDataList">
+
+                <datalist id="locationDataList">
+                    <option v-for="location in locations">{{ location }}</option>
                 </datalist>
+
             </div>
         </div>
         <div class="form-floating mb-3">
@@ -120,48 +118,8 @@ Vue.component('add-computer-form',{
     // <div>
     //     <slot></slot>
     //     <form @submit.prevent="postComputer" action="" method="post">
-    //     <p>
-    //     <input type="text" name="fmake" placeholder="Make" v-model="make">
-    //     </p>
-    //     <p>
-    //     <input type="text" name="fmodel" placeholder="Model" v-model="model">
-    //     </p>
-    //     <p>
-    //     <input type="text" name="fserviceTag" placeholder="Service Tag" v-model="service_tag">
-    //     </p>
-    //     <p>
-    //     <input type="text" name="fassetTag" placeholder="Asset Tag" v-model="asset_tag">
-    //     </p>
-    //     <p>
-    //     <input type="checkbox" name="fissued" placeholder="Issued" v-model="issued">
-    //     </p>
-    //     <p>
-    //     <input type="text" name="fassignedTo" placeholder="Assigned" v-model="assigned_to">
-    //     </p>
-    //     <p>
-    //     <input type="checkbox" name="fonHand" placeholder="On Hand" v-model="on_hand">
-    //     </p>
-    //     <p>
-    //     <input type="checkbox" name="fonLocation" placeholder="On Location" v-model="on_location">
-    //     </p>
-    //     <p>
-    //     <input type="text" name="fcomputerLocation" placeholder="Location" v-model="computer_location">
-    //     </p>
-    //     <p>
-    //     <input type="text" name="fclassLocation" placeholder="Class Location" v-model="class_location">
-    //     </p>
-    //     <p>
-    //     <input type="text" name="fchecker" placeholder="Checker" v-model="checker">
-    //     </p>
-    //     <p>
-    //     <input type="textarea" name="fnotes" placeholder="Notes" v-model="notes">
-    //     </p>
-    //     <p>
     //     <input type="submit" @click="return True">
-    //     </p>
-    //     </form>
-    // </div>
-    // `
+
 })
 
 
@@ -194,10 +152,13 @@ var app = new Vue({
                 return computer[this.parentSearch.property].includes(this.parentSearch.search)
             })
         },
-        locations(){
+        getLocations(){
             var array = [];
             for(var id in this.computerList) {
-                array.push(this.computerList[id].computer_location);
+                var location = this.computerList[id].computer_location
+                if(!array.includes(location)) {
+                    array.push(this.computerList[id].computer_location);
+                }
             }
             return array
         }

@@ -23,7 +23,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <add-computer-form></add-computer-form>
+                            <add-computer-form v-bind:locations="getLocations"></add-computer-form>
                         </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -58,10 +58,6 @@
             <section v-else>
                 <div v-if="loading">Loading...</div>
                 <div v-else>
-
-                    <h1 v-for="location in locations">
-                        {{ location }}
-                    </h1>
 
                     <table style="width: 100%; overflow-x: auto" class="table">
                         <tr>
