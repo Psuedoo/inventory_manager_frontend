@@ -100,7 +100,8 @@ Vue.component('add-computer-form',{
         </div>
         <div>
             <div class="form-floating mb-3">
-                <input class="form-control" id="locationInput" list="locationDataList">
+                <input class="form-control" id="locationInput" list="locationDataList" placeholder="">
+                <label for="locationInput">Location</label>
 
                 <datalist id="locationDataList">
                     <option v-for="location in locations">{{ location }}</option>
