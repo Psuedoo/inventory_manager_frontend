@@ -13,65 +13,42 @@
 
     </header>
     <body>
-
-
-
-
-
-
-        <div id="add-computer-modal" class="modal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add Computer</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-
-                        <div id="add-computer">
-                
-                            <add-computer-form></add-computer-form>
-                    
+        
+        <div id="app">
+            <div id="add-computer-modal" class="modal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Computer</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                        <div class="modal-body">
+                            <add-computer-form></add-computer-form>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div id="app">
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
-                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                      <li class="nav-item">
-                        <button type="button" class="btn button-primary" data-bs-toggle="modal" data-bs-target="#add-computer-modal">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav nav-pills nav-justafied">
+                        <li class="nav-item active">
+                        <button type="button" class="btn button-dark" data-bs-toggle="modal" data-bs-target="#add-computer-modal">
                             Add Computer
                         </button>
-                      </li>
-                      <!-- <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          Dropdown
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li><a class="dropdown-item" href="#">Action</a></li>
-                          <li><a class="dropdown-item" href="#">Another action</a></li>
-                          <li><hr class="dropdown-divider"></li>
-                          <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                      </li> -->
-
+                        </li>
                     </ul>
-                    <form class="d-flex">
-                        <search v-bind:parent="parentSearch"></search>
-                    </form>
-                  </div>
+                    </div>
+                        <form class="d-flex">
+                            <search v-bind:table-Filter="parentSearch"></search>
+                        </form>
                 </div>
-              </nav>
+            </nav>
 
 
             <section v-if="errored">
@@ -82,6 +59,9 @@
                 <div v-if="loading">Loading...</div>
                 <div v-else>
 
+                    <h1 v-for="location in locations">
+                        {{ location }}
+                    </h1>
 
                     <table style="width: 100%; overflow-x: auto" class="table">
                         <tr>
@@ -123,7 +103,7 @@
             </section>
 
         </div>
-        <script src="add-computer.js"></script>
+        <!-- <script src="add-computer.js"></script> -->
         <script src="index.js"></script>
     </body>
     <footer>

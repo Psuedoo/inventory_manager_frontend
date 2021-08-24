@@ -1,12 +1,10 @@
 Vue.component('search', {
-    props: ['parent'],
+    props: ['tableFilter'],
     template:`
     <div class="input-group nb3">
         <slot></slot>
     
-        <label for="values">Choose a search value:</label>
-
-        <select name="values" id="values" v-model="parent.property">
+        <select class="form-select form-select-lg" name="values" id="values" v-model="tableFilter.property">
             <option value="make">Make</option>
             <option value="model">Model</option>
             <option value="service_tag">Service Tag</option>
@@ -19,9 +17,151 @@ Vue.component('search', {
             <option value="notes">Notes</option>
         </select>
         
-        <input type="text" v-model="parent.search" placeholder="Type here">
+        <input type="text" v-model="tableFilter.search" placeholder="Type here">
     </div>
     `
+})
+
+Vue.component('computerTable', {
+    template: ''
+})
+
+Vue.component('add-computer-form',{
+    data : function () {
+        return {
+            make: '',
+            model: '',
+            service_tag: '',
+            asset_tag: '',
+            issued: false,
+            assigned_to: '',
+            on_hand: false,
+            on_location: false,
+            computer_location: '',
+            class_location: '',
+            checker: '',
+            notes: '',
+        }
+    },
+    methods: {
+        postComputer: function () {
+            axios
+            .post('http://localhost:8000/inventory/add/', {
+                make: this.make,
+                model: this.model,
+                service_tag: this.service_tag,
+                asset_tag: this.asset_tag,
+                issued: this.issued,
+                assigned_to: this.assigned_to,
+                on_hand: this.on_hand,
+                on_location: this.on_location,
+                computer_location: this.computer_location,
+                class_location: this.class_location,
+                checker: this.checker,
+                notes: this.notes
+
+            })
+            .then((res) => {
+                location.reload()
+            })
+            // .then(response => (parent.response = response.statusCode))
+        }    
+    },
+    template: `
+    <div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="make" placeholder="">
+            <label for="make">Make</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="model" placeholder="">
+            <label for="model">Model</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="serviceTag" placeholder="">
+            <label for="serviceTag">Service Tag</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="assetTag" placeholder="">
+            <label for="assetTag">Asset Tag</label>
+        </div>
+        <div class="form-check form-switch">
+            <label class="form-check-label" for="issuedSwitch">Issued</label>
+            <input class="form-check-input" type="checkbox" id="issuedSwitch">
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="assignedTo" placeholder="">
+            <label for="assignedTo">Assigned To</label>
+        </div>
+        <div class="form-check form-switch">
+            <label class="form-check-label" for="onHandSwitch">On Hand</label>
+            <input class="form-check-input" type="checkbox" id="onHandSwitch" checked>
+        </div>
+        <div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="location" placeholder="">
+                <label for="location">Location</label>
+            </div>
+            <div class="form-floating mb-3">
+                <label for="locationListInput" class="form-label">Locations</label>
+                <input class="form-control" list="locationList" id="locationListInput" placeholder="E.g. Classroom 2401">
+                <datalist id="locationList">
+                    <!-- For loop goes here -->
+                </datalist>
+            </div>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="checker" placeholder="">
+            <label for="checker">Checker</label>
+        </div>
+    </div>
+    `
+    // template:`
+    // <div>
+    //     <slot></slot>
+    //     <form @submit.prevent="postComputer" action="" method="post">
+    //     <p>
+    //     <input type="text" name="fmake" placeholder="Make" v-model="make">
+    //     </p>
+    //     <p>
+    //     <input type="text" name="fmodel" placeholder="Model" v-model="model">
+    //     </p>
+    //     <p>
+    //     <input type="text" name="fserviceTag" placeholder="Service Tag" v-model="service_tag">
+    //     </p>
+    //     <p>
+    //     <input type="text" name="fassetTag" placeholder="Asset Tag" v-model="asset_tag">
+    //     </p>
+    //     <p>
+    //     <input type="checkbox" name="fissued" placeholder="Issued" v-model="issued">
+    //     </p>
+    //     <p>
+    //     <input type="text" name="fassignedTo" placeholder="Assigned" v-model="assigned_to">
+    //     </p>
+    //     <p>
+    //     <input type="checkbox" name="fonHand" placeholder="On Hand" v-model="on_hand">
+    //     </p>
+    //     <p>
+    //     <input type="checkbox" name="fonLocation" placeholder="On Location" v-model="on_location">
+    //     </p>
+    //     <p>
+    //     <input type="text" name="fcomputerLocation" placeholder="Location" v-model="computer_location">
+    //     </p>
+    //     <p>
+    //     <input type="text" name="fclassLocation" placeholder="Class Location" v-model="class_location">
+    //     </p>
+    //     <p>
+    //     <input type="text" name="fchecker" placeholder="Checker" v-model="checker">
+    //     </p>
+    //     <p>
+    //     <input type="textarea" name="fnotes" placeholder="Notes" v-model="notes">
+    //     </p>
+    //     <p>
+    //     <input type="submit" @click="return True">
+    //     </p>
+    //     </form>
+    // </div>
+    // `
 })
 
 
@@ -36,6 +176,7 @@ var app = new Vue({
         computerList: [],
         loading: true,
         errored: false,
+        locationList: [],
     },
     mounted () {
         axios
@@ -52,6 +193,13 @@ var app = new Vue({
             return this.computerList.filter(computer => {
                 return computer[this.parentSearch.property].includes(this.parentSearch.search)
             })
+        },
+        locations(){
+            var array = [];
+            for(var id in this.computerList) {
+                array.push(this.computerList[id].computer_location);
+            }
+            return array
         }
     }
 })
