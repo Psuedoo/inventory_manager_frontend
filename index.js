@@ -25,8 +25,8 @@ Vue.component('search', {
 Vue.component('computer-table', {
     props: ['computerList'],
     template: `
-    <table style="width: 100%; overflow-x: auto" class="table table-striped">
-        <thead>
+    <table style="width: 100%; overflow-x: auto" class="table table-striped table-hover">
+        <thead class="table-dark">
             <tr>
                 <th scope="col">Make</th>
                 <th scope="col">Model</th>
