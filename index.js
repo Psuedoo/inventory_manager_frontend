@@ -43,7 +43,13 @@ Vue.component('add-computer-form',{
             notes: '',
         }
     },
-    props: ['locations'],
+    props: [
+        'makeList',
+        'modelList',
+        'assignedToList',
+        'locationList',
+        'classLocationList',
+    ],
     methods: {
         postComputer: function () {
             axios
@@ -55,7 +61,7 @@ Vue.component('add-computer-form',{
                 issued: this.issued,
                 assigned_to: this.assigned_to,
                 on_hand: this.on_hand,
-                on_location: this.on_location,
+                on_location: !this.on_hand,
                 computer_location: this.computer_location,
                 class_location: this.class_location,
                 checker: this.checker,
@@ -69,51 +75,92 @@ Vue.component('add-computer-form',{
         }    
     },
     template: `
-    <div>
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="make" placeholder="">
-            <label for="make">Make</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="model" placeholder="">
-            <label for="model">Model</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="serviceTag" placeholder="">
-            <label for="serviceTag">Service Tag</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="assetTag" placeholder="">
-            <label for="assetTag">Asset Tag</label>
-        </div>
-        <div class="form-check form-switch">
-            <label class="form-check-label" for="issuedSwitch">Issued</label>
-            <input class="form-check-input" type="checkbox" id="issuedSwitch">
-        </div>
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="assignedTo" placeholder="">
-            <label for="assignedTo">Assigned To</label>
-        </div>
-        <div class="form-check form-switch">
-            <label class="form-check-label" for="onHandSwitch">On Hand</label>
-            <input class="form-check-input" type="checkbox" id="onHandSwitch" checked>
-        </div>
-        <div>
-            <div class="form-floating mb-3">
-                <input class="form-control" id="locationInput" list="locationDataList" placeholder="">
-                <label for="locationInput">Location</label>
-
-                <datalist id="locationDataList">
-                    <option v-for="location in locations">{{ location }}</option>
-                </datalist>
-
+    <div id="add-computer-modal" class="modal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Computer</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="make" list="makeDataList" placeholder="" v-model="make">
+                                    <label for="make">Make</label>
+                        
+                                    <datalist id="makeDataList">
+                                            <option v-for="make in makeList">{{ make }}</option>
+                                    </datalist>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="model" list="modelDataList" placeholder="" v-model="model">
+                                    <label for="model">Model</label>
+                        
+                                    <datalist id="modelDataList">
+                                            <option v-for="model in modelList">{{ model }}</option>
+                                    </datalist>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="serviceTag" placeholder="" v-model="service_tag">
+                                    <label for="serviceTag">Service Tag</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="assetTag" placeholder="" v-model="asset_tag">
+                                    <label for="assetTag">Asset Tag</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <label class="form-check-label" for="issuedSwitch">Issued</label>
+                                    <input class="form-check-input" type="checkbox" id="issuedSwitch">
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="assignedTo" list="assignedToDataList" placeholder="" v-model="assigned_to">
+                                    <label for="assignedTo">Assigned To</label>
+                        
+                                    <datalist id="assignedToDataList">
+                                        <option v-for="assignedTo in assignedToList">{{ assignedTo }}</option>
+                                </datalist>
+                                </div>
+                                <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="onHandSwitch" checked v-model="on_hand">
+                                    <label class="form-check-label" for="onHandSwitch">On Hand</label>
+                                </div>
+                                <div>
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="locationInput" list="locationDataList" placeholder="" v-model="computer_location">
+                                        <label for="locationInput">Location</label>
+                        
+                                        <datalist id="locationDataList">
+                                            <option v-for="location in locationList">{{ location }}</option>
+                                        </datalist>
+                        
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="classLocationInput" list="classLocationDataList" placeholder="" v-model="class_location">
+                                        <label for="classLocationInput">Class Location</label>
+                        
+                                        <datalist id="classLocationDataList">
+                                            <option v-for="classLocation in classLocationList">{{ classLocation }}</option>
+                                        </datalist>
+                        
+                                    </div>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="checker" placeholder="" v-model="checker">
+                                    <label for="checker">Checker</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" id="notes" placeholder="" v-model="notes"></textarea>
+                                    <label for="notes">Notes</label>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" v-on:click="postComputer">Add Computer</button>
+                    </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="checker" placeholder="">
-            <label for="checker">Checker</label>
-        </div>
-    </div>
     `
     // template:`
     // <div>
@@ -135,7 +182,11 @@ var app = new Vue({
         computerList: [],
         loading: true,
         errored: false,
+        makeList: [],
+        modelList: [],
+        assignedToList: [],
         locationList: [],
+        classLocationList: [],
     },
     mounted () {
         axios
@@ -145,7 +196,24 @@ var app = new Vue({
             console.log(error)
             this.errored = true
         })
-        .finally(() => this.loading = false)
+        .finally(() => {
+            this.loading = false;
+            for(var id in this.computerList) {
+                var make = this.computerList[id].make;
+                var model = this.computerList[id].model;
+                var assignedTo = this.computerList[id].assigned_to;
+                var location = this.computerList[id].computer_location;
+                var classLocation = this.computerList[id].class_location;
+                if(!this.makeList.includes(make)) {this.makeList.push(make)}
+                if(!this.modelList.includes(model)) {this.modelList.push(model)}
+                if(!this.assignedToList.includes(assignedTo)) {this.assignedToList.push(assignedTo)}
+                if(!this.locationList.includes(location)) {this.locationList.push(location)}
+                if(!this.classLocationList.includes(classLocation)) {this.classLocationList.push(classLocation)}
+            }
+        });
+        
+
+
     },
     computed: {
         filteredList(){
@@ -153,16 +221,6 @@ var app = new Vue({
                 return computer[this.parentSearch.property].includes(this.parentSearch.search)
             })
         },
-        getLocations(){
-            var array = [];
-            for(var id in this.computerList) {
-                var location = this.computerList[id].computer_location
-                if(!array.includes(location)) {
-                    array.push(this.computerList[id].computer_location);
-                }
-            }
-            return array
-        }
     }
 })
 
