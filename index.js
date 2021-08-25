@@ -73,7 +73,7 @@ Vue.component('add-computer-modal',{
             asset_tag: '',
             issued: false,
             assigned_to: '',
-            on_hand: false,
+            on_hand: true,
             on_location: false,
             computer_location: '',
             class_location: '',
@@ -148,7 +148,7 @@ Vue.component('add-computer-modal',{
                                 </div>
                                 <div class="form-check form-switch">
                                     <label class="form-check-label" for="issuedSwitch">Issued</label>
-                                    <input class="form-check-input" type="checkbox" id="issuedSwitch">
+                                    <input class="form-check-input" type="checkbox" id="issuedSwitch" v-model="issued">
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="assignedTo" list="assignedToDataList" placeholder="" v-model="assigned_to">
@@ -159,7 +159,7 @@ Vue.component('add-computer-modal',{
                                 </datalist>
                                 </div>
                                 <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="onHandSwitch" checked v-model="on_hand">
+                                    <input class="form-check-input" type="checkbox" id="onHandSwitch" checked v-model="on_hand">
                                     <label class="form-check-label" for="onHandSwitch">On Hand</label>
                                 </div>
                                 <div>
