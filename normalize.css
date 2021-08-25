@@ -429,3 +429,7 @@ table tr:hover {background-color: rgb(220, 88, 42); color: white;}
 .dropdown-content a:hover {
     background-color: #0074aa;
 }
+
+.hidden {
+    display: none;
+}
