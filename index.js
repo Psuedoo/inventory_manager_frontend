@@ -23,7 +23,7 @@ Vue.component('search', {
 })
 
 Vue.component('computer-table', {
-    props: ['computerList'],
+    props: ['computerList', 'showComputerDetails'],
     template: `
     <table style="width: 100%; overflow-x: auto" class="table table-striped table-hover">
         <thead class="table-dark">
@@ -44,7 +44,7 @@ Vue.component('computer-table', {
             </tr>
         </thead>
         <tbody>
-            <tr v-for="computer in computerList">
+            <tr v-on:click="showComputerDetails(computer)" v-for="computer in computerList">
                 <td>{{ computer.make }}</td>
                 <td>{{ computer.model }}</td>
                 <td>{{ computer.service_tag }}</td>
@@ -110,7 +110,7 @@ Vue.component('add-computer-modal',{
                 location.reload()
             })
             // .then(response => (parent.response = response.statusCode))
-        }    
+        }
     },
     template: `
     <div id="add-computer-modal" class="modal" tabindex="-1">
@@ -220,6 +220,11 @@ var app = new Vue({
         locationList: [],
         classLocationList: [],
     },
+    methods: {
+        showComputerDetails: function (computer){
+            console.log(computer);
+        }
+    },
     mounted () {
         axios
         .get('http://localhost:8000/inventory/')
@@ -243,8 +248,6 @@ var app = new Vue({
                 if(!this.classLocationList.includes(classLocation)) {this.classLocationList.push(classLocation)}
             }
         });
-        
-
 
     },
     computed: {

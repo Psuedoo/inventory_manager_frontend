@@ -48,7 +48,10 @@
             <section v-else>
                 <div v-if="loading">Loading...</div>
                 <div v-else>
-                    <computer-table v-bind:computer-List="filteredList"></computer-table>
+                    <computer-table
+                    v-bind:computer-List="filteredList"
+                    v-bind:show-Computer-Details="showComputerDetails"
+                    ></computer-table>
                 </div>
             </section>
 
