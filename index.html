@@ -16,13 +16,13 @@
         
         <div id="app">
 
-            <add-computer-form
+            <add-computer-modal
             v-bind:make-List="makeList"
             v-bind:model-List="modelList"
             v-bind:assigned-To-List="assignedToList"
             v-bind:location-List="locationList"
             v-bind:class-Location-List="classLocationList"
-            ></add-computer-form>
+            ></add-computer-modal>
             
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -50,43 +50,7 @@
             <section v-else>
                 <div v-if="loading">Loading...</div>
                 <div v-else>
-
-                    <table style="width: 100%; overflow-x: auto" class="table">
-                        <tr>
-                            <thead>
-                                <th>Make</th>
-                                <th>Model</th>
-                                <th>Service Tag</th>
-                                <th>Asset Tag</th>
-                                <th>Issued</th>
-                                <th>Assigned To</th>
-                                <th>On Hand</th>
-                                <th>On Location</th>
-                                <th>Location</th>
-                                <th>Class Location</th>
-                                <th>Checker</th>
-                                <th>Last Time Checked</th>
-                                <th>Notes</th>
-                            </thead>
-                        </tr>
-                        <tbody>
-                            <tr v-for="computer in filteredList">
-                                <td>{{ computer.make }}</td>
-                                <td>{{ computer.model }}</td>
-                                <td>{{ computer.service_tag }}</td>
-                                <td>{{ computer.asset_tag }}</td>
-                                <td>{{ computer.issued }}</td>
-                                <td>{{ computer.assigned_to }}</td>
-                                <td>{{ computer.on_hand }}</td>
-                                <td>{{ computer.on_location }}</td>
-                                <td>{{ computer.computer_location }}</td>
-                                <td>{{ computer.class_location }}</td>
-                                <td>{{ computer.checker }}</td>
-                                <td>{{ moment(computer.time_checked).fromNow() }}</td>
-                                <td>{{ computer.notes }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <computer-table v-bind:computer-List="filteredList"></computer-table>
                 </div>
             </section>
 

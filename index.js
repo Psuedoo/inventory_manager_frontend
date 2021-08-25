@@ -22,11 +22,49 @@ Vue.component('search', {
     `
 })
 
-Vue.component('computerTable', {
-    template: ''
+Vue.component('computer-table', {
+    props: ['computerList'],
+    template: `
+    <table style="width: 100%; overflow-x: auto" class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Make</th>
+                <th scope="col">Model</th>
+                <th>Service Tag</th>
+                <th>Asset Tag</th>
+                <th>Issued</th>
+                <th>Assigned To</th>
+                <th>On Hand</th>
+                <th>On Location</th>
+                <th>Location</th>
+                <th>Class Location</th>
+                <th>Checker</th>
+                <th>Last Time Checked</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="computer in computerList">
+                <td>{{ computer.make }}</td>
+                <td>{{ computer.model }}</td>
+                <td>{{ computer.service_tag }}</td>
+                <td>{{ computer.asset_tag }}</td>
+                <td>{{ computer.issued }}</td>
+                <td>{{ computer.assigned_to }}</td>
+                <td>{{ computer.on_hand }}</td>
+                <td>{{ computer.on_location }}</td>
+                <td>{{ computer.computer_location }}</td>
+                <td>{{ computer.class_location }}</td>
+                <td>{{ computer.checker }}</td>
+                <td>{{ moment(computer.time_checked).fromNow() }}</td>
+                <td>{{ computer.notes }}</td>
+            </tr>
+        </tbody>
+    </table>
+    `
 })
 
-Vue.component('add-computer-form',{
+Vue.component('add-computer-modal',{
     data : function () {
         return {
             make: '',
@@ -162,12 +200,6 @@ Vue.component('add-computer-form',{
                 </div>
             </div>
     `
-    // template:`
-    // <div>
-    //     <slot></slot>
-    //     <form @submit.prevent="postComputer" action="" method="post">
-    //     <input type="submit" @click="return True">
-
 })
 
 
