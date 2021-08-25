@@ -22,6 +22,7 @@
             v-bind:assigned-To-List="assignedToList"
             v-bind:location-List="locationList"
             v-bind:class-Location-List="classLocationList"
+            v-bind:show-Modal="showModal"
             ></add-computer-modal>
             
 
@@ -30,7 +31,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="nav nav-pills nav-fill">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="modal" data-bs-target="#add-computer-modal">Add Computer</a>
+                            <a class="nav-link active" @click="showModal=true" data-bs-target="#add-computer-modal" >Add Computer</a>
                         </li>
                     </ul>
                     </div>
@@ -50,7 +51,7 @@
                 <div v-else>
                     <computer-table
                     v-bind:computer-List="filteredList"
-                    v-bind:show-Computer-Details="showComputerDetails"
+                    v-bind:show-Modal="showModal"
                     ></computer-table>
                 </div>
             </section>

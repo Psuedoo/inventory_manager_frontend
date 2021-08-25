@@ -23,7 +23,7 @@ Vue.component('search', {
 })
 
 Vue.component('computer-table', {
-    props: ['computerList', 'showComputerDetails'],
+    props: ['computerList', 'showModal'],
     template: `
     <table style="width: 100%; overflow-x: auto" class="table table-striped table-hover">
         <thead class="table-dark">
@@ -44,7 +44,10 @@ Vue.component('computer-table', {
             </tr>
         </thead>
         <tbody>
-            <tr v-on:click="showComputerDetails(computer)" v-for="computer in computerList">
+            <tr
+            @dblclick="showModal=true"
+            v-for="computer in computerList"
+            >
                 <td>{{ computer.make }}</td>
                 <td>{{ computer.model }}</td>
                 <td>{{ computer.service_tag }}</td>
@@ -67,6 +70,7 @@ Vue.component('computer-table', {
 Vue.component('add-computer-modal',{
     data : function () {
         return {
+            id: '',
             make: '',
             model: '',
             service_tag: '',
@@ -79,6 +83,8 @@ Vue.component('add-computer-modal',{
             class_location: '',
             checker: '',
             notes: '',
+            isAdding: true,
+            isUpdating: !this.isAdding,
         }
     },
     props: [
@@ -87,6 +93,7 @@ Vue.component('add-computer-modal',{
         'assignedToList',
         'locationList',
         'classLocationList',
+        'showModal'
     ],
     methods: {
         postComputer: function () {
@@ -110,15 +117,36 @@ Vue.component('add-computer-modal',{
                 location.reload()
             })
             // .then(response => (parent.response = response.statusCode))
+        },
+        updateComputer: function (computer_id) {
+            axios
+            .put('http://localhost:8000/inventory/update/', computer_id, {
+                make: this.make,
+                model: this.model,
+                service_tag: this.service_tag,
+                asset_tag: this.asset_tag,
+                issued: this.issued,
+                assigned_to: this.assigned_to,
+                on_hand: this.on_hand,
+                on_location: !this.on_hand,
+                computer_location: this.computer_location,
+                class_location: this.class_location,
+                checker: this.checker,
+                notes: this.notes
+            })
+            .then((res) => {
+                location.reload()
+            })
         }
     },
     template: `
-    <div id="add-computer-modal" class="modal" tabindex="-1">
+    <div v-if="showModal">
+        <div id="add-computer-modal" class="modal show" tabindex="-1" aria-hidden="false" style="display: block;">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Add Computer</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" @click="showModal=false" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div>
@@ -193,12 +221,13 @@ Vue.component('add-computer-modal',{
                             </div>
                         </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" @click="showModal=false">Close</button>
                         <button type="button" class="btn btn-primary" v-on:click="postComputer">Add Computer</button>
                     </div>
                     </div>
                 </div>
             </div>
+    </div>
     `
 })
 
@@ -219,11 +248,7 @@ var app = new Vue({
         assignedToList: [],
         locationList: [],
         classLocationList: [],
-    },
-    methods: {
-        showComputerDetails: function (computer){
-            console.log(computer);
-        }
+        showModal: false,
     },
     mounted () {
         axios
