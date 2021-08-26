@@ -100,20 +100,22 @@ Vue.component('add-computer-modal',{
         postComputer: function (event) {
             const {id, make, model, service_tag, asset_tag, issued, assigned_to, on_hand, on_location, computer_location, class_location, checker, notes}
             = Object.fromEntries(new FormData(event.target));
+            console.log(event);
+            console.log(make);
             axios
             .post('http://localhost:8000/inventory/add/', {
-                make: this.make,
-                model: this.model,
-                service_tag: this.service_tag,
-                asset_tag: this.asset_tag,
-                issued: this.issued,
-                assigned_to: this.assigned_to,
-                on_hand: this.on_hand,
-                on_location: !this.on_hand,
-                computer_location: this.computer_location,
-                class_location: this.class_location,
-                checker: this.checker,
-                notes: this.notes
+                make: make,
+                model: model,
+                service_tag: service_tag,
+                asset_tag: asset_tag,
+                issued: issued,
+                assigned_to: assigned_to,
+                on_hand: on_hand,
+                on_location:  on_location,
+                computer_location: computer_location,
+                class_location: class_location,
+                checker: checker,
+                notes: notes
                 
             })
             .then((res) => {
@@ -144,14 +146,14 @@ Vue.component('add-computer-modal',{
         getTitle: function () {
             if(this.isAdding) {return 'Add Computer'} else {return 'Update Computer'}
         },
-        chooseRequest: function (isAdding, computer) {
-            if(isAdding) {this.postComputer(computer)}
+        chooseRequest: function (event, isAdding, computer) {
+            if(isAdding) {this.postComputer(event)}
             if(!isAdding) {this.updateComputer(computer)}
         }
     },
     template: `
     <div v-if="showModal">
-    <form @submit.prevent="postComputer(event)">
+    <form @submit.prevent="postComputer">
         <div id="add-computer-modal" class="modal show" tabindex="-1" aria-hidden="false" style="display: block;">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -162,7 +164,7 @@ Vue.component('add-computer-modal',{
                         <div class="modal-body">
                         <div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="make" list="makeDataList" placeholder="" :value="computerObj.make">
+                                <input type="text" class="form-control" id="make" list="makeDataList" placeholder="" :value="computerObj.make" name="make">
                                 <label for="make">Make</label>
                     
                                 <datalist id="makeDataList">
@@ -170,7 +172,7 @@ Vue.component('add-computer-modal',{
                                 </datalist>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="model" list="modelDataList" placeholder="" :value="computerObj.model">
+                                <input type="text" class="form-control" id="model" list="modelDataList" placeholder="" :value="computerObj.model" name="model">
                                 <label for="model">Model</label>
                     
                                 <datalist id="modelDataList">
@@ -178,19 +180,19 @@ Vue.component('add-computer-modal',{
                                 </datalist>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="serviceTag" placeholder="" :value="computerObj.service_tag">
+                                <input type="text" class="form-control" id="serviceTag" placeholder="" :value="computerObj.service_tag" name="service_tag">
                                 <label for="serviceTag">Service Tag</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="assetTag" placeholder="" :value="computerObj.asset_tag">
+                                <input type="text" class="form-control" id="assetTag" placeholder="" :value="computerObj.asset_tag" name="asset_tag">
                                 <label for="assetTag">Asset Tag</label>
                             </div>
                             <div class="form-check form-switch">
                                 <label class="form-check-label" for="issuedSwitch">Issued</label>
-                                <input class="form-check-input" type="checkbox" id="issuedSwitch" :value="computerObj.issued">
+                                <input class="form-check-input" type="checkbox" id="issuedSwitch" :value="computerObj.issued" name="issued">
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="assignedTo" list="assignedToDataList" placeholder="" :value="computerObj.assigned_to">
+                                <input type="text" class="form-control" id="assignedTo" list="assignedToDataList" placeholder="" :value="computerObj.assigned_to" name="assigned_to">
                                 <label for="assignedTo">Assigned To</label>
                     
                                 <datalist id="assignedToDataList">
@@ -198,12 +200,12 @@ Vue.component('add-computer-modal',{
                             </datalist>
                             </div>
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="onHandSwitch" checked :value="computerObj.on_hand">
+                                <input class="form-check-input" type="checkbox" id="onHandSwitch" checked :value="computerObj.on_hand" name="on_hand">
                                 <label class="form-check-label" for="onHandSwitch">On Hand</label>
                             </div>
                             <div>
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" id="locationInput" list="locationDataList" placeholder="" :value="computerObj.computer_location">
+                                    <input class="form-control" id="locationInput" list="locationDataList" placeholder="" :value="computerObj.computer_location" name="computer_location">
                                     <label for="locationInput">Location</label>
                     
                                     <datalist id="locationDataList">
@@ -212,7 +214,7 @@ Vue.component('add-computer-modal',{
                     
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" id="classLocationInput" list="classLocationDataList" placeholder="" :value="computerObj.class_location">
+                                    <input class="form-control" id="classLocationInput" list="classLocationDataList" placeholder="" :value="computerObj.class_location" name="class_location">
                                     <label for="classLocationInput">Class Location</label>
                     
                                     <datalist id="classLocationDataList">
@@ -222,11 +224,11 @@ Vue.component('add-computer-modal',{
                                 </div>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="checker" placeholder="" :value="computerObj.checker">
+                                <input type="text" class="form-control" id="checker" placeholder="" :value="computerObj.checker" name="checker">
                                 <label for="checker">Checker</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <textarea class="form-control" id="notes" placeholder="" :value="computerObj.notes"></textarea>
+                                <textarea class="form-control" id="notes" placeholder="" :value="computerObj.notes" name="notes"></textarea>
                                 <label for="notes">Notes</label>
                             </div>
                         </div>
