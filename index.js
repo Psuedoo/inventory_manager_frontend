@@ -1,6 +1,8 @@
 Vue.component('computer-table', {
+    props: ['computers'],
     data: function () {
         return {
+            search: '',
             headers: [
             {
                 text: 'Make',
@@ -21,75 +23,41 @@ Vue.component('computer-table', {
             { text: 'Last Time Checked', value: 'time_checked' },
             { text: 'Notes', value: 'notes' },
         ],
-            computers: [
-                {
-                    make: 'Dell',
-                    model: 'Latitude 1',
-                    service_tag: '1',
-                    asset_tag: '124654',
-                    issued: false,
-                    assigned_to: 'Unassigned',
-                    on_hand: true,
-                    on_location: !this.on_hand,
-                    computer_location: 'Storage',
-                    checker: 'Tracy',
-                    time_checked: '10:00 PM',
-                    notes: '',
-                },
-                {
-                    make: 'Dell',
-                    model: 'Latitude 2',
-                    service_tag: '2',
-                    asset_tag: '124654',
-                    issued: false,
-                    assigned_to: 'Unassigned',
-                    on_hand: true,
-                    on_location: !this.on_hand,
-                    computer_location: 'Storage',
-                    checker: 'Tracy',
-                    time_checked: '10:00 PM',
-                    notes: '',
-                },
-                {
-                    make: 'Dell',
-                    model: 'Latitude 3',
-                    service_tag: '3',
-                    asset_tag: '124654',
-                    issued: false,
-                    assigned_to: 'Unassigned',
-                    on_hand: true,
-                    on_location: !this.on_hand,
-                    computer_location: 'Storage',
-                    checker: 'Tracy',
-                    time_checked: '10:00 PM',
-                    notes: '',
-                },
-                {
-                    make: 'Dell',
-                    model: 'Latitude 4',
-                    service_tag: '4',
-                    asset_tag: '124654',
-                    issued: false,
-                    assigned_to: 'Unassigned',
-                    on_hand: true,
-                    on_location: !this.on_hand,
-                    computer_location: 'Storage',
-                    checker: 'Tracy',
-                    time_checked: '10:00 PM',
-                    notes: '',
-                },
-            ],
         }
     },
     template: `
-    <v-data-table
-    :headers="this.headers"
-    :items="this.computers"
-    class="elevation-1"
-    ></v-data-table>
+    <div>
+        <v-data-table
+        :headers="this.headers"
+        :items="this.computers"
+        :search="search"
+        :items-per-page="50"
+        class="elevation-1"
+        loading-text="Loading... Please wait"
+        no-data-text="No data"
+        >
+        </v-data-table>
+    </div>
     `
 })
 var app = new Vue({
     el: '#app',
     vuetify: new Vuetify(),
+    data: function () {
+        return {
+            computers: [],
+        }
+    },
+    mounted () {
+        axios
+        .get('http://localhost:8000/inventory/')
+        .then(response => (this.computers = response.data))
+        .catch(error => {
+            console.log(error)
+            this.errored = true
+        })
+        .finally(() => {
+            this.loading = false;
+        });
+    },
 })

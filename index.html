@@ -17,9 +17,11 @@
         
         <div id="app">
 
+            <!-- <p>{{ computers }}</p> -->
+
             <v-app>
                 <v-main>
-                    <computer-table></computer-table>
+                    <computer-table v-bind:computers="computers"></computer-table>
                 </v-main>
             </v-app>
 
