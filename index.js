@@ -118,9 +118,27 @@ Vue.component('computer-table', {
                     Object.assign(this.computers[this.editedIndex], this.editedItem)
                 } else {
                     this.computers.push(this.editedItem)
+                    this.addComputerToDB(this.editedItem)
                 }
                 this.close()
-            }
+            },
+            addComputerToDB (computer) {
+                axios
+                .post('http://localhost:8000/inventory/add/', {
+                    make: computer.make,
+                    model: computer.model,
+                    service_tag: computer.service_tag,
+                    asset_tag: computer.asset_tag,
+                    issued: computer.issued,
+                    assigned_to: computer.assigned_to,
+                    on_hand: computer.on_hand,
+                    on_location:  computer.on_location,
+                    computer_location: computer.computer_location,
+                    class_location: computer.class_location,
+                    checker: computer.checker,
+                    notes: computer.notes
+                })
+            },
         },
 
     template: `
