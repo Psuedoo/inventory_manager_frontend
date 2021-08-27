@@ -36,6 +36,24 @@ Vue.component('computer-table', {
         loading-text="Loading... Please wait"
         no-data-text="No data"
         >
+            <template v-slot:item.issued="{ item }">
+                <v-simple-checkbox
+                    v-model="item.issued"
+                    disabled
+                ><v-simple-checkbox>
+            </template>
+            <template v-slot:item.on_hand="{ item }">
+                <v-simple-checkbox
+                    v-model="item.on_hand"
+                    disabled
+                ><v-simple-checkbox>
+            </template>
+            <template v-slot:item.on_location="{ item }">
+                <v-simple-checkbox
+                    v-model="item.on_location"
+                    disabled
+                ><v-simple-checkbox>
+            </template>
             <template v-slot:item.time_checked="{ item }">
                 <v-chip
                     :color="getColor(item.time_checked)"
