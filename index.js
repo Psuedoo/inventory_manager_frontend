@@ -74,6 +74,9 @@ Vue.component('computer-table', {
         },
 
         methods: {
+            initialize () {
+                location.reload();
+            },
             formatDate(value) {
                 return moment(value).fromNow()
             },
@@ -117,7 +120,7 @@ Vue.component('computer-table', {
                 if (this.editedIndex > -1) {
                     Object.assign(this.computers[this.editedIndex], this.editedItem)
                 } else {
-                    this.computers.push(this.editedItem)
+                    // this.computers.push(this.editedItem)
                     this.addComputerToDB(this.editedItem)
                 }
                 this.close()
@@ -137,6 +140,8 @@ Vue.component('computer-table', {
                     class_location: computer.class_location,
                     checker: computer.checker,
                     notes: computer.notes
+                }).then(() => {
+                    this.initialize();
                 })
             },
         },
