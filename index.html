@@ -9,8 +9,6 @@
         <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
-        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script> -->
 
 
     </header>
@@ -18,62 +16,13 @@
         
         <div id="app">
 
-            <!-- <p>{{ computers }}</p> -->
-
             <v-app>
                 <v-main>
-                    <!-- <app-bar></app-bar> -->
                     <computer-table v-bind:computers="computers"></computer-table>
                 </v-main>
             </v-app>
 
-            <!-- <add-computer-modal
-            v-bind:make-List="makeList"
-            v-bind:model-List="modelList"
-            v-bind:assigned-To-List="assignedToList"
-            v-bind:location-List="locationList"
-            v-bind:class-Location-List="classLocationList"
-            v-bind:show-Modal="showModal"
-            v-bind:invert-Show-Modal="invertShowModal"
-            v-bind:computer-Obj="computer"
-            v-bind:is-Adding="isAdding"
-            ></add-computer-modal>
-            
-
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-                <div class="container-fluid">
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="nav nav-pills nav-fill">
-                        <li class="nav-item">
-                            <a class="nav-link active" @click="invertShowModal(); isAdding=true;" >Add Computer</a>
-                        </li>
-                    </ul>
-                    </div>
-                        <form class="d-flex">
-                            <search v-bind:table-Filter="parentSearch"></search>
-                        </form>
-                </div>
-            </nav>
-
-
-            <section v-if="errored">
-                <p>Unable to retrieve the inventory at the moment. Please try again later.</p>
-            </section>
-
-            <section v-else>
-                <div v-if="loading">Loading...</div>
-                <div v-else>
-                    <computer-table
-                    v-bind:computer-List="filteredList"
-                    v-bind:invert-Show-Modal="invertShowModal"
-                    v-bind:is-Adding="isAdding"
-                    v-bind:set-Is-Adding="setIsAdding"
-                    ></computer-table>
-                </div>
-            </section> -->
-
         </div>
-        <!-- <script src="add-computer.js"></script> -->
         <script src="index.js"></script>
     </body>
     <footer>
