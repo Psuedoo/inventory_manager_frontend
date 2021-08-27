@@ -92,6 +92,7 @@ Vue.component('computer-table', {
                 this.editedIndex = this.computers.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialog = true
+                console.log(item.id);
             },
             deleteItem (item) {
                 this.editedIndex = this.computers.indexOf(item)
@@ -119,6 +120,7 @@ Vue.component('computer-table', {
             save () {
                 if (this.editedIndex > -1) {
                     Object.assign(this.computers[this.editedIndex], this.editedItem)
+                    this.updateComputerInDB(this.editedItem.id, this.editedItem);
                 } else {
                     // this.computers.push(this.editedItem)
                     this.addComputerToDB(this.editedItem)
@@ -140,11 +142,31 @@ Vue.component('computer-table', {
                     class_location: computer.class_location,
                     checker: computer.checker,
                     notes: computer.notes
-                }).then(() => {
+                }).then((res) => {
                     this.initialize();
                 })
             },
+            updateComputerInDB: function (computer_id, computer) {
+                axios
+                .put('http://localhost:8000/inventory/update/' + computer_id, {
+                    make: computer.make,
+                    model: computer.model,
+                    service_tag: computer.service_tag,
+                    asset_tag: computer.asset_tag,
+                    issued: computer.issued,
+                    assigned_to: computer.assigned_to,
+                    on_hand: computer.on_hand,
+                    on_location: computer.on_location,
+                    computer_location: computer.computer_location,
+                    class_location: computer.class_location,
+                    checker: computer.checker,
+                    notes: computer.notes
+                })
+                .then((res) => {
+                    this.initialize();
+                })
         },
+    },
 
     template: `
     <div>
