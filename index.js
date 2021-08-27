@@ -86,7 +86,7 @@ Vue.component('add-computer-modal',{
             model: '',
             service_tag: '',
             asset_tag: '',
-            issued: false,
+            issued: true,
             assigned_to: '',
             on_hand: true,
             on_location: false,
@@ -98,24 +98,38 @@ Vue.component('add-computer-modal',{
     },
     methods: {
         postComputer: function (event) {
-            const {id, make, model, service_tag, asset_tag, issued, assigned_to, on_hand, on_location, computer_location, class_location, checker, notes}
+            const {id, make, model, service_tag, asset_tag, issued, assigned_to, on_hand, computer_location, class_location, checker, notes}
             = Object.fromEntries(new FormData(event.target));
+            console.log(issued);
+            this.id = id
+            this.make = make
+            this.model = model
+            this.service_tag = service_tag
+            this.asset_tag = asset_tag
+            issued == undefined ? this.issued = false : this.issued = true
+            this.assigned_to = assigned_to
+            this.on_hand = on_hand
+            this.on_location =  !on_hand
+            this.computer_location = computer_location
+            this.class_location = class_location
+            this.checker = checker
+            this.notes = notes            
             console.log(event);
             console.log(make);
             axios
             .post('http://localhost:8000/inventory/add/', {
-                make: make,
-                model: model,
-                service_tag: service_tag,
-                asset_tag: asset_tag,
-                issued: issued,
-                assigned_to: assigned_to,
-                on_hand: on_hand,
-                on_location:  on_location,
-                computer_location: computer_location,
-                class_location: class_location,
-                checker: checker,
-                notes: notes
+                make: this.make,
+                model: this.model,
+                service_tag: this.service_tag,
+                asset_tag: this.asset_tag,
+                issued: this.issued,
+                assigned_to: this.assigned_to,
+                on_hand: this.on_hand,
+                on_location:  this.on_location,
+                computer_location: this.computer_location,
+                class_location: this.class_location,
+                checker: this.checker,
+                notes: this.notes
                 
             })
             .then((res) => {
@@ -188,8 +202,8 @@ Vue.component('add-computer-modal',{
                                 <label for="assetTag">Asset Tag</label>
                             </div>
                             <div class="form-check form-switch">
-                                <label class="form-check-label" for="issuedSwitch">Issued</label>
-                                <input class="form-check-input" type="checkbox" id="issuedSwitch" :value="computerObj.issued" name="issued">
+                            <input class="form-check-input" type="checkbox" id="issuedSwitch" false-value="false" :value="computerObj.issued" name="issued">
+                            <label class="form-check-label" for="issuedSwitch">Issued</label>
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="assignedTo" list="assignedToDataList" placeholder="" :value="computerObj.assigned_to" name="assigned_to">
