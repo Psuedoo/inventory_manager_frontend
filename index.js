@@ -2,6 +2,7 @@ Vue.component('computer-table', {
     props: ['computers'],
     data: function () {
         return {
+            search: '',
             dialog: false,
             dialogDelete: false,
             headers: [
@@ -174,6 +175,7 @@ Vue.component('computer-table', {
         :headers="this.headers"
         :items="this.computers"
         :items-per-page="1500"
+        :search="search"
         class="elevation-1"
         loading-text="Loading... Please wait"
         no-data-text="No data"
@@ -189,27 +191,38 @@ Vue.component('computer-table', {
                 vertical
             ></v-divider>
             <v-spacer></v-spacer>
+            
+            <v-text-field
+                v-model="search"
+                prepend-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+            ></v-text-field>
+            
+            <v-spacer></v-spacer>
+
             <v-dialog
-                v-model="dialog"
-                max-width="500px"
+            v-model="dialog"
+            max-width="500px"
             >
-                <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                    color="primary"
-                    dark
-                    class="mb-2"
-                    v-bind="attrs"
-                    v-on="on"
-                >
-                    New Item
-                </v-btn>
-                </template>
-                <v-card>
-                <v-card-title>
-                    <span class="text-h5">{{ formTitle }}</span>
-                </v-card-title>
-    
-                <v-card-text>
+            <template v-slot:activator="{ on, attrs }">
+            <v-btn
+            color="primary"
+            dark
+            class="mb-2"
+            v-bind="attrs"
+            v-on="on"
+            >
+            New Item
+            </v-btn>
+            </template>
+            <v-card>
+            <v-card-title>
+            <span class="text-h5">{{ formTitle }}</span>
+            </v-card-title>
+            
+            <v-card-text>
                     <v-container>
                     <v-row>
                         <v-col
