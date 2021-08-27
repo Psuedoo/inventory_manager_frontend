@@ -31,14 +31,35 @@ Vue.component('computer-table', {
         :headers="this.headers"
         :items="this.computers"
         :search="search"
-        :items-per-page="50"
+        :items-per-page="1500"
         class="elevation-1"
         loading-text="Loading... Please wait"
         no-data-text="No data"
         >
+            <template v-slot:item.time_checked="{ item }">
+                <v-chip
+                    :color="getColor(item.time_checked)"
+                    dark
+                >
+                    {{ formatDate(item.time_checked) }}
+                </v-chip>
+            </template>
         </v-data-table>
     </div>
-    `
+    `,
+    methods: {
+        formatDate(value) {
+            return moment(value).fromNow()
+        },
+        getColor(time) {
+            var timeObj = moment(time);
+            var now = moment();
+            var duration = moment.duration(now.diff(timeObj, 'days'));
+            if (duration > 30) return 'red'
+            if (duration > 15) return 'yellow'
+            else return 'green'
+        }
+    }
 })
 var app = new Vue({
     el: '#app',
@@ -61,3 +82,5 @@ var app = new Vue({
         });
     },
 })
+
+Vue.prototype.moment = moment;
