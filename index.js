@@ -123,7 +123,6 @@ Vue.component('computer-table', {
                     Object.assign(this.computers[this.editedIndex], this.editedItem)
                     this.updateComputerInDB(this.editedItem.id, this.editedItem);
                 } else {
-                    // this.computers.push(this.editedItem)
                     this.addComputerToDB(this.editedItem)
                 }
                 this.close()
