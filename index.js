@@ -1,274 +1,33 @@
-Vue.component('search', {
-    props: ['tableFilter'],
-    template:`
-    <div class="input-group nb3">
-        <slot></slot>
-    
-        <select class="form-select form-select-lg" name="values" id="values" v-model="tableFilter.property">
-            <option value="make">Make</option>
-            <option value="model">Model</option>
-            <option value="service_tag">Service Tag</option>
-            <option value="asset_tag">Asset Tag</option>
-            <option value="assigned_to">Assigned To</option>
-            <option value="computer_location">Location</option>
-            <option value="class_location">Class Location</option>
-            <option value="checker">Checker</option>
-            <option value="time_checked">Last Time Checked</option>
-            <option value="notes">Notes</option>
-        </select>
-        
-        <input class="form-control me-2" type="search" v-model="tableFilter.search" placeholder="Type here">
-    </div>
-    `
-})
-
 Vue.component('computer-table', {
-    props: ['computerList', 'invertShowModal', 'isAdding', 'setIsAdding'],
-    template: `
-    <table style="width: 100%; overflow-x: auto" class="table table-striped table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th scope="col">Make</th>
-                <th scope="col">Model</th>
-                <th>Service Tag</th>
-                <th>Asset Tag</th>
-                <th>Issued</th>
-                <th>Assigned To</th>
-                <th>On Hand</th>
-                <th>On Location</th>
-                <th>Location</th>
-                <th>Class Location</th>
-                <th>Checker</th>
-                <th>Last Time Checked</th>
-                <th>Notes</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr
-            @dblclick="setIsAdding('update'); invertShowModal(computer);"
-            v-for="computer in computerList"
-            >
-                <td>{{ computer.make }}</td>
-                <td>{{ computer.model }}</td>
-                <td>{{ computer.service_tag }}</td>
-                <td>{{ computer.asset_tag }}</td>
-                <td>{{ computer.issued }}</td>
-                <td>{{ computer.assigned_to }}</td>
-                <td>{{ computer.on_hand }}</td>
-                <td>{{ computer.on_location }}</td>
-                <td>{{ computer.computer_location }}</td>
-                <td>{{ computer.class_location }}</td>
-                <td>{{ computer.checker }}</td>
-                <td>{{ moment(computer.time_checked).fromNow() }}</td>
-                <td>{{ computer.notes }}</td>
-            </tr>
-        </tbody>
-    </table>
-    `
-})
-
-Vue.component('add-computer-modal',{
-    props: [
-        'makeList',
-        'modelList',
-        'assignedToList',
-        'locationList',
-        'classLocationList',
-        'invertShowModal',
-        'showModal',
-        'computerObj',
-        'isAdding',
-    ],
-    data : function () {
+    props: ['computers'],
+    data: function () {
         return {
-            id: '',
-            make: '',
-            model: '',
-            service_tag: '',
-            asset_tag: '',
-            issued: true,
-            assigned_to: '',
-            on_hand: true,
-            on_location: false,
-            computer_location: '',
-            class_location: '',
-            checker: '',
-            notes: '',
-        }
-    },
-    methods: {
-        postComputer: function (event) {
-            const {id, make, model, service_tag, asset_tag, issued, assigned_to, on_hand, computer_location, class_location, checker, notes}
-            = Object.fromEntries(new FormData(event.target));
-            console.log(issued);
-            this.id = id
-            this.make = make
-            this.model = model
-            this.service_tag = service_tag
-            this.asset_tag = asset_tag
-            issued == undefined ? this.issued = false : this.issued = true
-            this.assigned_to = assigned_to
-            this.on_hand = on_hand
-            this.on_location =  !on_hand
-            this.computer_location = computer_location
-            this.class_location = class_location
-            this.checker = checker
-            this.notes = notes            
-            console.log(event);
-            console.log(make);
-            axios
-            .post('http://localhost:8000/inventory/add/', {
-                make: this.make,
-                model: this.model,
-                service_tag: this.service_tag,
-                asset_tag: this.asset_tag,
-                issued: this.issued,
-                assigned_to: this.assigned_to,
-                on_hand: this.on_hand,
-                on_location:  this.on_location,
-                computer_location: this.computer_location,
-                class_location: this.class_location,
-                checker: this.checker,
-                notes: this.notes
-                
-            })
-            .then((res) => {
-                location.reload()
-            })
-            // .then(response => (parent.response = response.statusCode))
-        },
-        updateComputer: function (computer_id) {
-            axios
-            .put('http://localhost:8000/inventory/update/', computer_id, {
-                make: this.make,
-                model: this.model,
-                service_tag: this.service_tag,
-                asset_tag: this.asset_tag,
-                issued: this.issued,
-                assigned_to: this.assigned_to,
-                on_hand: this.on_hand,
-                on_location: !this.on_hand,
-                computer_location: this.computer_location,
-                class_location: this.class_location,
-                checker: this.checker,
-                notes: this.notes
-            })
-            .then((res) => {
-                location.reload()
-            })
-        },
-        getTitle: function () {
-            if(this.isAdding) {return 'Add Computer'} else {return 'Update Computer'}
-        },
-        chooseRequest: function (event, isAdding, computer) {
-            if(isAdding) {this.postComputer(event)}
-            if(!isAdding) {this.updateComputer(computer)}
-        }
-    },
-    template: `
-    <div v-if="showModal">
-    <form @submit.prevent="postComputer">
-        <div id="add-computer-modal" class="modal show" tabindex="-1" aria-hidden="false" style="display: block;">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">{{ getTitle() }}</h5>
-                            <button type="button" class="btn-close" @click="invertShowModal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                        <div>
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="make" list="makeDataList" placeholder="" :value="computerObj.make" name="make">
-                                <label for="make">Make</label>
-                    
-                                <datalist id="makeDataList">
-                                        <option v-for="make in makeList">{{ make }}</option>
-                                </datalist>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="model" list="modelDataList" placeholder="" :value="computerObj.model" name="model">
-                                <label for="model">Model</label>
-                    
-                                <datalist id="modelDataList">
-                                        <option v-for="model in modelList">{{ model }}</option>
-                                </datalist>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="serviceTag" placeholder="" :value="computerObj.service_tag" name="service_tag">
-                                <label for="serviceTag">Service Tag</label>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="assetTag" placeholder="" :value="computerObj.asset_tag" name="asset_tag">
-                                <label for="assetTag">Asset Tag</label>
-                            </div>
-                            <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="issuedSwitch" false-value="false" :value="computerObj.issued" name="issued">
-                            <label class="form-check-label" for="issuedSwitch">Issued</label>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="assignedTo" list="assignedToDataList" placeholder="" :value="computerObj.assigned_to" name="assigned_to">
-                                <label for="assignedTo">Assigned To</label>
-                    
-                                <datalist id="assignedToDataList">
-                                    <option v-for="assignedTo in assignedToList">{{ assignedTo }}</option>
-                            </datalist>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="onHandSwitch" checked :value="computerObj.on_hand" name="on_hand">
-                                <label class="form-check-label" for="onHandSwitch">On Hand</label>
-                            </div>
-                            <div>
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" id="locationInput" list="locationDataList" placeholder="" :value="computerObj.computer_location" name="computer_location">
-                                    <label for="locationInput">Location</label>
-                    
-                                    <datalist id="locationDataList">
-                                        <option v-for="location in locationList">{{ location }}</option>
-                                    </datalist>
-                    
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" id="classLocationInput" list="classLocationDataList" placeholder="" :value="computerObj.class_location" name="class_location">
-                                    <label for="classLocationInput">Class Location</label>
-                    
-                                    <datalist id="classLocationDataList">
-                                        <option v-for="classLocation in classLocationList">{{ classLocation }}</option>
-                                    </datalist>
-                    
-                                </div>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="checker" placeholder="" :value="computerObj.checker" name="checker">
-                                <label for="checker">Checker</label>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <textarea class="form-control" id="notes" placeholder="" :value="computerObj.notes" name="notes"></textarea>
-                                <label for="notes">Notes</label>
-                            </div>
-                        </div>
-                        </div>
-                        <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="invertShowModal">Close</button>
-                        <button type="submit" class="btn btn-primary">{{ getTitle() }}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    `
-})
-
-
-var app = new Vue({
-    el: '#app',
-    data: {
-        parentSearch: {
             search: '',
-            property: 'make',   
-        },
-        computer: {
-            id: '',
+            dialog: false,
+            dialogDelete: false,
+            headers: [
+            {
+                text: 'Make',
+                align: 'start',
+                sortable: 'false',
+                value: 'make'
+            },
+            { text: 'Model', value: 'model' },
+            { text: 'Service Tag', value: 'service_tag', sortable: 'true'},
+            { text: 'Asset Tag', value: 'asset_tag' },
+            { text: 'Issued', value: 'issued' },
+            { text: 'Assigned To', value: 'assigned_to' },
+            { text: 'On Hand', value: 'on_hand' },
+            { text: 'On Location', value: 'on_location' },
+            { text: 'Location', value: 'computer_location' },
+            { text: 'Class Location', value: 'class_location' },
+            { text: 'Checker', value: 'checker' },
+            { text: 'Last Time Checked', value: 'time_checked' },
+            { text: 'Notes', value: 'notes' },
+            { text: 'Actions', value:'actions', sortable: 'false' }
+        ],
+        editedIndex: -1,
+        editedItem: {
             make: '',
             model: '',
             service_tag: '',
@@ -276,83 +35,430 @@ var app = new Vue({
             issued: false,
             assigned_to: '',
             on_hand: true,
-            on_location: true,
+            on_location: false,
             computer_location: '',
+            class_location: '',
             checker: '',
             time_checked: '',
             notes: ''
         },
-        search: '',
-        computerList: [],
-        loading: true,
-        errored: false,
-        makeList: [],
-        modelList: [],
-        assignedToList: [],
-        locationList: [],
-        classLocationList: [],
-        showModal: false,
-        isAdding: false,
+        defaultItem: {
+            make: '',
+            model: '',
+            service_tag: '',
+            asset_tag: '',
+            issued: false,
+            assigned_to: '',
+            on_hand: true,
+            on_location: false,
+            computer_location: '',
+            class_location: '',
+            checker: '',
+            time_checked: '',
+            notes: ''
+        }
+        }},
+
+        computed: {
+            formTitle () {
+                return this.editedIndex === -1 ? 'New Computer' : 'Edit Computer'
+            }
+        },
+
+        watch: {
+            dialog (val) {
+                val || this.close()
+            },
+            dialogDelete (val) {
+                val || this.closeDelete()
+            }
+        },
+
+        methods: {
+            initialize () {
+                location.reload();
+            },
+            formatDate(value) {
+                return moment(value).fromNow()
+            },
+            getColor(time) {
+                var timeObj = moment(time);
+                var now = moment();
+                var duration = moment.duration(now.diff(timeObj, 'days'));
+                if (duration > 30) return 'red'
+                if (duration > 15) return 'yellow'
+                else return 'green'
+            },
+            editItem (item) {
+                this.editedIndex = this.computers.indexOf(item)
+                this.editedItem = Object.assign({}, item)
+                this.dialog = true
+            },
+            deleteItem (item) {
+                this.editedIndex = this.computers.indexOf(item)
+                this.editedItem = Object.assign({}, item)
+                this.dialogDelete = true
+            },
+            deleteItemConfirm () {
+                this.computers.splice(this.editedIndex, 1)
+                this.deleteComputerFromDB(this.editedItem.id)
+                this.closeDelete()
+            },
+            close () {
+                this.dialog = false
+                this.$nextTick(() => {
+                    this.editedItem = Object.assign({}, this.defaultItem)
+                    this.editedIndex = -1
+                })
+            },
+            closeDelete () {
+                this.dialogDelete = false
+                this.$nextTick(() => {
+                    this.editedItem = Object.assign({}, this.defaultItem)
+                    this.editedIndex = -1
+                })
+            },
+            save () {
+                if (this.editedIndex > -1) {
+                    Object.assign(this.computers[this.editedIndex], this.editedItem)
+                    this.updateComputerInDB(this.editedItem.id, this.editedItem);
+                } else {
+                    // this.computers.push(this.editedItem)
+                    this.addComputerToDB(this.editedItem)
+                }
+                this.close()
+            },
+            addComputerToDB (computer) {
+                axios
+                .post('http://localhost:8000/inventory/add/', {
+                    make: computer.make,
+                    model: computer.model,
+                    service_tag: computer.service_tag,
+                    asset_tag: computer.asset_tag,
+                    issued: computer.issued,
+                    assigned_to: computer.assigned_to,
+                    on_hand: computer.on_hand,
+                    on_location:  computer.on_location,
+                    computer_location: computer.computer_location,
+                    class_location: computer.class_location,
+                    checker: computer.checker,
+                    notes: computer.notes
+                }).then((res) => {
+                    this.initialize();
+                })
+            },
+            updateComputerInDB: function (computer_id, computer) {
+                axios
+                .put('http://localhost:8000/inventory/update/' + computer_id, {
+                    make: computer.make,
+                    model: computer.model,
+                    service_tag: computer.service_tag,
+                    asset_tag: computer.asset_tag,
+                    issued: computer.issued,
+                    assigned_to: computer.assigned_to,
+                    on_hand: computer.on_hand,
+                    on_location: computer.on_location,
+                    computer_location: computer.computer_location,
+                    class_location: computer.class_location,
+                    checker: computer.checker,
+                    notes: computer.notes
+                })
+                .then((res) => {
+                    this.initialize();
+                })
+            },
+            deleteComputerFromDB: function (computer_id) {
+                axios
+                .delete('http://localhost:8000/inventory/delete/' + computer_id)
+                .then((res) => {
+                    this.initialize();
+                })
+            }
+    },
+
+    template: `
+    <div>
+        <v-data-table
+        :headers="this.headers"
+        :items="this.computers"
+        :items-per-page="1500"
+        :search="search"
+        class="elevation-1"
+        loading-text="Loading... Please wait"
+        no-data-text="No data"
+        >
+            <template v-slot:top>
+            <v-toolbar
+            flat
+            >
+            <v-toolbar-title>Computers</v-toolbar-title>
+            <v-divider
+                class="mx-4"
+                inset
+                vertical
+            ></v-divider>
+            <v-spacer></v-spacer>
+            
+            <v-text-field
+                v-model="search"
+                prepend-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+            ></v-text-field>
+            
+            <v-spacer></v-spacer>
+
+            <v-dialog
+            v-model="dialog"
+            max-width="500px"
+            >
+            <template v-slot:activator="{ on, attrs }">
+            <v-btn
+            color="primary"
+            dark
+            class="mb-2"
+            v-bind="attrs"
+            v-on="on"
+            >
+            New Item
+            </v-btn>
+            </template>
+            <v-card>
+            <v-card-title>
+            <span class="text-h5">{{ formTitle }}</span>
+            </v-card-title>
+            
+            <v-card-text>
+                    <v-container>
+                    <v-row>
+                        <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                        >
+                        <v-text-field
+                            v-model="editedItem.make"
+                            label="Make"
+                        ></v-text-field>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                        >
+                        <v-text-field
+                            v-model="editedItem.model"
+                            label="Model"
+                        ></v-text-field>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                        >
+                        <v-text-field
+                            v-model="editedItem.service_tag"
+                            label="Service Tag"
+                        ></v-text-field>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                        >
+                        <v-text-field
+                            v-model="editedItem.asset_tag"
+                            label="Asset Tag"
+                        ></v-text-field>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                        >
+                        <v-checkbox
+                            v-model="editedItem.issued"
+                            label="Issued"
+                        ></v-checkbox>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                        >
+                        <v-text-field
+                            v-model="editedItem.assigned_to"
+                            label="Assigned To"
+                        ></v-text-field>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                        >
+                        <v-checkbox
+                            v-model="editedItem.on_hand"
+                            label="On Hand"
+                        ></v-checkbox>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                        >
+                        <v-checkbox
+                            v-model="editedItem.on_location"
+                            label="On Location"
+                        ></v-checkbox>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                        >
+                        <v-text-field
+                            v-model="editedItem.computer_location"
+                            label="Location"
+                        ></v-text-field>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                        >
+                        <v-text-field
+                            v-model="editedItem.class_location"
+                            label="Class Location"
+                        ></v-text-field>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                        >
+                        <v-text-field
+                            v-model="editedItem.checker"
+                            label="Checker"
+                        ></v-text-field>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                        >
+                        <v-text-field
+                            v-model="editedItem.notes"
+                            label="Notes"
+                        ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    </v-container>
+                </v-card-text>
+    
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="close"
+                    >
+                    Cancel
+                    </v-btn>
+                    <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="save"
+                    >
+                    Save
+                    </v-btn>
+                </v-card-actions>
+                </v-card>
+            </v-dialog>
+            <v-dialog v-model="dialogDelete" max-width="500px">
+                <v-card>
+                <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                    <v-btn color="blue darken-1" text @click="deleteItemConfirm">Yes</v-btn>
+                    <v-spacer></v-spacer>
+                </v-card-actions>
+                </v-card>
+
+            </v-dialog>
+            </v-toolbar>
+        </template>
+
+            <template v-slot:item.actions="{ item }">
+                <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+                >
+                    mdi-pencil
+                </v-icon>
+                <v-icon
+                    small
+                    @click="deleteItem(item)"
+                >
+                    mdi-delete
+                </v-icon>
+                </template>
+            </template>
+
+            <template v-slot:item.issued="{ item }">
+                <v-simple-checkbox
+                    v-model="item.issued"
+                    disabled
+                ></v-simple-checkbox>
+            </template>
+            <template v-slot:item.on_hand="{ item }">
+                <v-simple-checkbox
+                    v-model="item.on_hand"
+                    disabled
+                ></v-simple-checkbox>
+            </template>
+            <template v-slot:item.on_location="{ item }">
+                <v-simple-checkbox
+                    v-model="item.on_location"
+                    disabled
+                ></v-simple-checkbox>
+            </template>
+            <template v-slot:item.time_checked="{ item }">
+                <v-chip
+                    :color="getColor(item.time_checked)"
+                    dark
+                >
+                    {{ formatDate(item.time_checked) }}
+                </v-chip>
+            </template>
+        </v-data-table>
+    </div>
+    `,
+
+})
+
+
+var app = new Vue({
+    el: '#app',
+    vuetify: new Vuetify(),
+    data: function () {
+        return {
+            computers: [],
+        }
     },
     mounted () {
         axios
         .get('http://localhost:8000/inventory/')
-        .then(response => (this.computerList = response.data))
+        .then(response => (this.computers = response.data))
         .catch(error => {
             console.log(error)
             this.errored = true
         })
         .finally(() => {
             this.loading = false;
-            for(var id in this.computerList) {
-                var make = this.computerList[id].make;
-                var model = this.computerList[id].model;
-                var assignedTo = this.computerList[id].assigned_to;
-                var location = this.computerList[id].computer_location;
-                var classLocation = this.computerList[id].class_location;
-                if(!this.makeList.includes(make)) {this.makeList.push(make)}
-                if(!this.modelList.includes(model)) {this.modelList.push(model)}
-                if(!this.assignedToList.includes(assignedTo)) {this.assignedToList.push(assignedTo)}
-                if(!this.locationList.includes(location)) {this.locationList.push(location)}
-                if(!this.classLocationList.includes(classLocation)) {this.classLocationList.push(classLocation)}
-            }
         });
-
-    },
-    computed: {
-        filteredList(){
-            return this.computerList.filter(computer => {
-                return computer[this.parentSearch.property].includes(this.parentSearch.search)
-            })
-        },
-    },
-    methods: {
-        invertShowModal: function (computer=null){
-            if(computer) {
-                this.computer.id = computer.id
-                this.computer.make = computer.make
-                this.computer.model = computer.model
-                this.computer.service_tag = computer.service_tag
-                this.computer.asset_tag = computer.asset_tag                
-                this.computer.issued = computer.issued                
-                this.computer.assigned_to = computer.assigned_to                
-                this.computer.on_hand = computer.on_hand                
-                this.computer.on_location = computer.on_location                
-                this.computer.location = computer.location                
-                this.computer.class_location = computer.class_location                
-                this.computer.checker = computer.checker                
-                this.computer.time_checked = computer.time_checked                
-                this.computer.notes = computer.notes                
-
-            }
-            this.showModal = !this.showModal;
-            return this.showModal
-        },
-        setIsAdding: function (x) {
-            if(x == 'add') {this.isAdding = true } 
-            if(x == 'update') { this.isAdding = false }
-            return this.isAdding;
-        }
     },
 })
 
