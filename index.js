@@ -93,7 +93,6 @@ Vue.component('computer-table', {
                 this.editedIndex = this.computers.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialog = true
-                console.log(item.id);
             },
             deleteItem (item) {
                 this.editedIndex = this.computers.indexOf(item)
@@ -102,6 +101,7 @@ Vue.component('computer-table', {
             },
             deleteItemConfirm () {
                 this.computers.splice(this.editedIndex, 1)
+                this.deleteComputerFromDB(this.editedItem.id)
                 this.closeDelete()
             },
             close () {
@@ -166,7 +166,14 @@ Vue.component('computer-table', {
                 .then((res) => {
                     this.initialize();
                 })
-        },
+            },
+            deleteComputerFromDB: function (computer_id) {
+                axios
+                .delete('http://localhost:8000/inventory/delete/' + computer_id)
+                .then((res) => {
+                    this.initialize();
+                })
+            }
     },
 
     template: `
