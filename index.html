@@ -18,6 +18,18 @@
 
             <v-app>
                 <v-main>
+                    <v-app-bar
+                    color="#9a9b9d"
+                    dark
+                    >
+                        <v-app-bar-nav-icon>
+                        </v-app-bar-nav-icon>
+
+                        <v-toolbar-title>Inventory Manager</v-toolbar-title>
+
+                        <v-spacer></v-spacer>
+
+                    </v-app-bar>
                     <computer-table v-bind:computers="computers"></computer-table>
                 </v-main>
             </v-app>
