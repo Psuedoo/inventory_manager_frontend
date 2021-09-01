@@ -2,6 +2,7 @@ Vue.component('computer-table', {
     props: ['computers'],
     data: function () {
         return {
+            expanded: [],
             search: '',
             dialog: false,
             dialogDelete: false,
@@ -21,10 +22,10 @@ Vue.component('computer-table', {
             { text: 'On Location', value: 'on_location' },
             { text: 'Location', value: 'computer_location' },
             { text: 'Class Location', value: 'class_location' },
-            { text: 'Checker', value: 'checker.name' },
+            { text: 'Checker', value: 'checker' },
             { text: 'Last Time Checked', value: 'time_checked' },
-            { text: 'Notes', value: 'notes' },
-            { text: 'Actions', value:'actions', sortable: 'false' }
+            { text: 'Actions', value:'actions', sortable: 'false' },
+            { text: '', value: 'data-table=expand'}
         ],
         editedIndex: -1,
         editedItem: {
@@ -180,8 +181,12 @@ Vue.component('computer-table', {
         <v-data-table
         :headers="this.headers"
         :items="this.computers"
-        :items-per-page="1500"
+        :single-expand="true"
+        :expanded.sync="expanded"
+        item-key="id"
+        :items-per-page="100"
         :search="search"
+        show-expand
         class="elevation-1"
         loading-text="Loading... Please wait"
         no-data-text="No data"
@@ -191,11 +196,6 @@ Vue.component('computer-table', {
             flat
             >
             <v-toolbar-title>Computers</v-toolbar-title>
-            <v-divider
-                class="mx-4"
-                inset
-                vertical
-            ></v-divider>
             <v-spacer></v-spacer>
             
             <v-text-field
@@ -389,6 +389,12 @@ Vue.component('computer-table', {
             </v-toolbar>
         </template>
 
+            <template v-slot:expanded-item="{ headers, item }">
+                <td :colspan="headers.length">
+                    Notes: {{ item.notes }}
+                </td>
+            </template>
+
             <template v-slot:item.actions="{ item }">
                 <v-icon
                     small
@@ -406,11 +412,19 @@ Vue.component('computer-table', {
                 </template>
             </template>
 
-            <template v-slot:item.checker="{ item }">
+            <template v-slot:item.checker="props">
                 <v-edit-dialog
-                    :return-value.sync="item.name"
+                    :return-value.sync="props.item.checker.name"
                 >
-                    {{ item.name }}
+                    {{ props.item.checker.name }}
+                    <template v-slot:input>
+                        <v-text-field
+                            v-model="props.item.checker.email"
+                            label="Model"
+                            single-line
+                            disabled
+                        ></v-text-field>
+                    </template>
                 </v-edit-dialog>
             </template>
 
