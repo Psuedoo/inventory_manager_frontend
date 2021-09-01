@@ -24,8 +24,8 @@ Vue.component('computer-table', {
             { text: 'Class Location', value: 'class_location' },
             { text: 'Checker', value: 'checker' },
             { text: 'Last Time Checked', value: 'time_checked' },
-            { text: 'Actions', value:'actions', sortable: 'false' },
-            { text: '', value: 'data-table=expand'}
+            { text: 'Actions', value: 'actions', sortable: 'false'},
+            { text: 'Notes', value: 'data-table-expand'},
         ],
         editedIndex: -1,
         editedItem: {
@@ -390,8 +390,9 @@ Vue.component('computer-table', {
         </template>
 
             <template v-slot:expanded-item="{ headers, item }">
-                <td :colspan="headers.length">
-                    Notes: {{ item.notes }}
+                <td :colspan="headers.length" align="center">
+                    <h1 v-if="item.notes">Notes: {{ item.notes }}</h1>
+                    <h1 v-else>No notes!</h1>
                 </td>
             </template>
 
