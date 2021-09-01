@@ -406,6 +406,14 @@ Vue.component('computer-table', {
                 </template>
             </template>
 
+            <template v-slot:item.checker="{ item }">
+                <v-edit-dialog
+                    :return-value.sync="item.name"
+                >
+                    {{ item.name }}
+                </v-edit-dialog>
+            </template>
+
             <template v-slot:item.issued="{ item }">
                 <v-simple-checkbox
                     v-model="item.issued"
