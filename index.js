@@ -21,7 +21,7 @@ Vue.component('computer-table', {
             { text: 'On Location', value: 'on_location' },
             { text: 'Location', value: 'computer_location' },
             { text: 'Class Location', value: 'class_location' },
-            { text: 'Checker', value: 'checker' },
+            { text: 'Checker', value: 'checker.name' },
             { text: 'Last Time Checked', value: 'time_checked' },
             { text: 'Notes', value: 'notes' },
             { text: 'Actions', value:'actions', sortable: 'false' }
