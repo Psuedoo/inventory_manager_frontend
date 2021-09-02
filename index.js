@@ -220,7 +220,13 @@ Vue.component('computer-table', {
             v-bind="attrs"
             v-on="on"
             >
-            New Item
+            New Computer
+            <v-icon
+            dark
+            right
+            >
+            mdi-plus
+            </v-icon>
             </v-btn>
             </template>
             <v-card>
