@@ -1,4 +1,5 @@
 Vue.component('login-form', {
+    props: ['token'],
     data: function () {
         return {
             valid: false,
@@ -9,17 +10,31 @@ Vue.component('login-form', {
             passwordRules: [
                 v => !!v || 'Password is required'
             ],
+            username: '',
+            password: '',
+            
         }
     },
     methods: {
-        login () {
-            console.log('LOGIN');
+        login: function () {
+            // const {username, password} = Object.fromEntries(new formData(event.target));
+            // this.username = username
+            console.log('USERNAME', this.username);
+            // this.password = password
+            console.log('PASSWORD', this.password);
+            axios.post('http://localhost:8000/login', {username: this.username, password: this.password}, {
+                auth: {
+                    username: this.username,
+                    password: this.password,
+                }
+            })
+            .then(response => (this.token = response.access_token))
         }
     },
     template:`
     <div>
         <template>
-            <v-form v-model="valid">
+            <v-form ref="form" v-model="valid" @submit.prevent="login" id="loginForm">
                 <v-container>
                     <v-row>
                         <v-col
@@ -29,6 +44,7 @@ Vue.component('login-form', {
                             <v-text-field
                             label="Username"
                             :rules="usernameRules"
+                            v-model="username"
                             required
                             ></v-text-field>
                         </v-col>
@@ -39,6 +55,7 @@ Vue.component('login-form', {
                             <v-text-field
                             label="Password"
                             :rules="passwordRules"
+                            v-model="password"
                             required
                             ></v-text-field>
                         </v-col>
@@ -46,13 +63,14 @@ Vue.component('login-form', {
                     <v-row>
                         <v-col>
                             <v-btn
+                            type="submit"
                             class="mr-4"
-                            @click="login"
+                            form="loginForm"
                             >
                                 login
                             </v-btn>
                         </v-col>
-                    <v-row>
+                    </v-row>
                 </v-container>
             </v-form>
         </template>
@@ -63,4 +81,5 @@ Vue.component('login-form', {
 var app = new Vue({
     el: '#login',
     vuetify: new Vuetify(),
+    token: '',
 })

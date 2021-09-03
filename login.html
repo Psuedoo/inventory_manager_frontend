@@ -18,7 +18,8 @@
 
             <v-app>
                 <v-main>
-                    <login-form></login-form>
+                    <login-form v-bind:token='token'></login-form>
+                    {{ token }}
                 </v-main>
             </v-app>
 
