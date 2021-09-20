@@ -178,291 +178,162 @@ Vue.component('computer-table', {
 
     template: `
     <div>
-        <v-data-table
-        :headers="this.headers"
-        :items="this.computers"
-        :single-expand="true"
-        :expanded.sync="expanded"
-        item-key="id"
-        :items-per-page="100"
-        :search="search"
-        show-expand
-        class="elevation-1"
-        loading-text="Loading... Please wait"
-        no-data-text="No data"
-        >
-            <template v-slot:top>
-            <v-toolbar
-            flat
-            >
-            <v-toolbar-title>Computers</v-toolbar-title>
-            <v-spacer></v-spacer>
-            
-            <v-text-field
-                v-model="search"
-                prepend-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-            ></v-text-field>
-            
-            <v-spacer></v-spacer>
+    <v-data-table :headers="this.headers" :items="this.computers" :single-expand="true" :expanded.sync="expanded" item-key="id" :items-per-page="100" :search="search" show-expand class="elevation-1" loading-text="Loading... Please wait" no-data-text="No data">
+        
+        <!-- Template for the top of the data table with search and add/edit computer form template inside -->
+        <template v-slot:top>
+            <v-toolbar flat>
 
-            <v-dialog
-            v-model="dialog"
-            max-width="500px"
-            >
-            <template v-slot:activator="{ on, attrs }">
-            <v-btn
-            color="primary"
-            dark
-            class="mb-2"
-            v-bind="attrs"
-            v-on="on"
-            >
-            New Computer
-            <v-icon
-            dark
-            right
-            >
-            mdi-plus
-            </v-icon>
-            </v-btn>
-            </template>
-            <v-card>
-            <v-card-title>
-            <span class="text-h5">{{ formTitle }}</span>
-            </v-card-title>
-            
-            <v-card-text>
-                    <v-container>
-                    <v-row>
-                        <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        >
-                        <v-text-field
-                            v-model="editedItem.make"
-                            label="Make"
-                        ></v-text-field>
-                        </v-col>
-                        <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        >
-                        <v-text-field
-                            v-model="editedItem.model"
-                            label="Model"
-                        ></v-text-field>
-                        </v-col>
-                        <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        >
-                        <v-text-field
-                            v-model="editedItem.service_tag"
-                            label="Service Tag"
-                        ></v-text-field>
-                        </v-col>
-                        <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        >
-                        <v-text-field
-                            v-model="editedItem.asset_tag"
-                            label="Asset Tag"
-                        ></v-text-field>
-                        </v-col>
-                        <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        >
-                        <v-checkbox
-                            v-model="editedItem.issued"
-                            label="Issued"
-                        ></v-checkbox>
-                        </v-col>
-                        <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        >
-                        <v-text-field
-                            v-model="editedItem.assigned_to"
-                            label="Assigned To"
-                        ></v-text-field>
-                        </v-col>
-                        <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        >
-                        <v-checkbox
-                            v-model="editedItem.on_hand"
-                            label="On Hand"
-                        ></v-checkbox>
-                        </v-col>
-                        <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        >
-                        <v-checkbox
-                            v-model="editedItem.on_location"
-                            label="On Location"
-                        ></v-checkbox>
-                        </v-col>
-                        <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        >
-                        <v-text-field
-                            v-model="editedItem.computer_location"
-                            label="Location"
-                        ></v-text-field>
-                        </v-col>
-                        <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        >
-                        <v-text-field
-                            v-model="editedItem.class_location"
-                            label="Class Location"
-                        ></v-text-field>
-                        </v-col>
-                        <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        >
-                        <v-text-field
-                            v-model="editedItem.checker"
-                            label="Checker"
-                        ></v-text-field>
-                        </v-col>
-                        <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        >
-                        <v-text-field
-                            v-model="editedItem.notes"
-                            label="Notes"
-                        ></v-text-field>
-                        </v-col>
-                    </v-row>
-                    </v-container>
-                </v-card-text>
-    
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="close"
-                    >
-                    Cancel
-                    </v-btn>
-                    <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="save"
-                    >
-                    Save
-                    </v-btn>
-                </v-card-actions>
-                </v-card>
-            </v-dialog>
-            <v-dialog v-model="dialogDelete" max-width="500px">
-                <v-card>
-                <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm">Yes</v-btn>
-                    <v-spacer></v-spacer>
-                </v-card-actions>
-                </v-card>
+                <v-toolbar-title>Computers</v-toolbar-title>
+                <v-spacer></v-spacer>
 
-            </v-dialog>
+                <!-- Search computer form -->
+                <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
+                
+                <v-spacer></v-spacer>
+
+                <!-- Add/Edit computer dialog -->
+                <v-dialog v-model="dialog" max-width="500px">
+
+                    <!-- Add computer button template -->
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click:dialog=true>
+                            New Computer
+                            <v-icon dark right>
+                                mdi-plus
+                            </v-icon>
+                        </v-btn>
+                    </template>
+
+                    <!-- Add/Edit computer modal body -->
+                    <v-card>
+                        <v-card-title>
+                            <span class="text-h5">{{ formTitle }}</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.make" label="Make"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.model" label="Model"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                    <v-text-field v-model="editedItem.service_tag" label="Service Tag"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.asset_tag" label="Asset Tag"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-checkbox v-model="editedItem.issued" abel="Issued"></v-checkbox>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.assigned_to" label="Assigned To"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-checkbox v-model="editedItem.on_hand" label="On Hand"></v-checkbox>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-checkbox v-model="editedItem.on_location" label="On Location"></v-checkbox>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.computer_location" label="Location"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.class_location" label="Class Location"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.checker" label="Checker"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.notes" label="Notes"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>    
+                        
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="close">
+                                Cancel
+                            </v-btn>
+                            <v-btn color="blue darken-1" text@click="save">
+                                Save
+                            </v-btn>
+                        </v-card-actions>
+                    
+                    </v-card>
+                </v-dialog> 
+
+                <!-- Delete computer dialog -->
+                <v-dialog v-model="dialogDelete" max-width="500px">
+                    <v-card>
+                        <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                            <v-btn color="blue darken-1" text @click="deleteItemConfirm">Yes</v-btn>
+                            <v-spacer></v-spacer>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+
             </v-toolbar>
         </template>
 
-            <template v-slot:expanded-item="{ headers, item }">
-                <td :colspan="headers.length" align="center">
-                    <h1 v-if="item.notes">Notes: {{ item.notes }}</h1>
-                    <h1 v-else>No notes!</h1>
-                </td>
-            </template>
+        <!-- Computer notes expansion drawer -->
+        <template v-slot:expanded-item="{ headers, item }">
+            <td :colspan="headers.length" align="center">
+                <h1 v-if="item.notes">Notes: {{ item.notes }}</h1>
+                <h1 v-else>No notes!</h1>
+            </td>
+        </template>
 
-            <template v-slot:item.actions="{ item }">
-                <v-icon
-                    small
-                    class="mr-2"
-                    @click="editItem(item)"
-                >
-                    mdi-pencil
-                </v-icon>
-                <v-icon
-                    small
-                    @click="deleteItem(item)"
-                >
-                    mdi-delete
-                </v-icon>
+        <!-- Edit/Delete computer icon functions -->
+        <template v-slot:item.actions="{ item }">
+            <v-icon small class="mr-2" @click="editItem(item)">
+                mdi-pencil
+            </v-icon>
+            <v-icon small @click="deleteItem(item)">
+                mdi-delete
+            </v-icon>
+        </template>
+
+        <!-- Checker Email dialog -->
+        <template v-slot:item.checker="props">
+            <v-edit-dialog :return-value.sync="props.item.checker.name">
+                {{ props.item.checker.name }}
+                <template v-slot:input>
+                    <v-text-field v-model="props.item.checker.email" label="Model" single-line disabled></v-text-field>
                 </template>
-            </template>
+            </v-edit-dialog>
+        </template>
 
-            <template v-slot:item.checker="props">
-                <v-edit-dialog
-                    :return-value.sync="props.item.checker.name"
-                >
-                    {{ props.item.checker.name }}
-                    <template v-slot:input>
-                        <v-text-field
-                            v-model="props.item.checker.email"
-                            label="Model"
-                            single-line
-                            disabled
-                        ></v-text-field>
-                    </template>
-                </v-edit-dialog>
-            </template>
+        <!-- Checkbox for if issued -->
+        <template v-slot:item.issued="{ item }">
+            <v-simple-checkbox v-model="item.issued" disabled></v-simple-checkbox>
+        </template>
 
-            <template v-slot:item.issued="{ item }">
-                <v-simple-checkbox
-                    v-model="item.issued"
-                    disabled
-                ></v-simple-checkbox>
-            </template>
-            <template v-slot:item.on_hand="{ item }">
-                <v-simple-checkbox
-                    v-model="item.on_hand"
-                    disabled
-                ></v-simple-checkbox>
-            </template>
-            <template v-slot:item.on_location="{ item }">
-                <v-simple-checkbox
-                    v-model="item.on_location"
-                    disabled
-                ></v-simple-checkbox>
-            </template>
-            <template v-slot:item.time_checked="{ item }">
-                <v-chip
-                    :color="getColor(item.time_checked)"
-                    dark
-                >
-                    {{ formatDate(item.time_checked) }}
-                </v-chip>
-            </template>
-        </v-data-table>
-    </div>
+        <!-- Checkbox for if on hand -->
+        <template v-slot:item.on_hand="{ item }">
+            <v-simple-checkbox v-model="item.on_hand" disabled></v-simple-checkbox>
+        </template>
+
+        <!-- Checkbox for if on location -->
+        <template v-slot:item.on_location="{ item }">
+            <v-simple-checkbox v-model="item.on_location" disabled></v-simple-checkbox>
+        </template>
+
+        <!-- Colored chip for time checked -->
+        <template v-slot:item.time_checked="{ item }">
+            <v-chip :color="getColor(item.time_checked)" dark>
+                {{ formatDate(item.time_checked) }}
+            </v-chip>
+        </template>
+
+    </v-data-table>
+</div>
     `,
 
 })
