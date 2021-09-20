@@ -17,17 +17,25 @@ Vue.component('login-form', {
     },
     methods: {
         login: function () {
+            var config = {
+                method: 'post',
+                url: 'http://localhost:8000/login',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                // auth: {
+                //     username: this.username,
+                //     password: this.password,
+                // },
+                data: `username=${this.username}&password=${this.password}`
+            }
             // const {username, password} = Object.fromEntries(new formData(event.target));
             // this.username = username
             console.log('USERNAME', this.username);
             // this.password = password
             console.log('PASSWORD', this.password);
-            axios.post('http://localhost:8000/login', {username: this.username, password: this.password}, {
-                auth: {
-                    username: this.username,
-                    password: this.password,
-                }
-            })
+            axios(config)
             .then(response => (this.token = response.access_token))
         }
     },
